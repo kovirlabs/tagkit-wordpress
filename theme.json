@@ -1,0 +1,68 @@
+{
+	"$schema": "https://schemas.wp.org/wp/6.6/theme.json",
+	"version": 3,
+	"settings": {
+		"appearanceTools": false,
+		"useRootPaddingAwareAlignments": false,
+		"color": {
+			"custom": true,
+			"customGradient": false,
+			"defaultDuotone": false,
+			"defaultGradients": false,
+			"defaultPalette": false,
+			"palette": [
+				{ "slug": "primary", "name": "Primary", "color": "#2563eb" }
+			]
+		},
+		"layout": {
+			"contentSize": "min(70ch, 100%)",
+			"wideSize": "min(1200px, 100%)"
+		},
+		"spacing": {
+			"defaultSpacingSizes": false,
+			"units": [ "px", "em", "rem", "%", "vw" ]
+		},
+		"typography": {
+			"defaultFontSizes": false,
+			"fluid": false,
+			"fontFamilies": [
+				{ "slug": "system", "name": "System", "fontFamily": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif" },
+				{ "slug": "serif", "name": "Serif", "fontFamily": "Charter, \"Bitstream Charter\", \"Sitka Text\", Cambria, Georgia, serif" },
+				{ "slug": "mono", "name": "Monospace", "fontFamily": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", monospace" }
+			],
+			"fontSizes": [
+				{ "slug": "small", "name": "Small", "size": "0.875rem" },
+				{ "slug": "medium", "name": "Medium", "size": "1rem" },
+				{ "slug": "large", "name": "Large", "size": "1.25rem" },
+				{ "slug": "x-large", "name": "Extra large", "size": "1.75rem" }
+			]
+		}
+	},
+	"styles": {
+		"spacing": {
+			"blockGap": "0px"
+		},
+		"blocks": {
+			"core/buttons": { "spacing": { "blockGap": "0.5rem" } },
+			"core/columns": { "spacing": { "blockGap": "1.5rem" } },
+			"core/post-template": { "spacing": { "blockGap": "1.5rem" } },
+			"core/navigation": { "spacing": { "blockGap": "1.5rem" } }
+		},
+		"elements": {
+			"button": {
+				"border": { "radius": "var(--button-radius)" },
+				"color": {
+					"background": "var(--color-primary)",
+					"text": "var(--color-on-primary, oklch(from var(--color-primary) clamp(0, (0.5636 - l) * 1000, 1) 0 0))"
+				},
+				"spacing": { "padding": "var(--button-padding)" },
+				"typography": { "fontWeight": "var(--button-font-weight)", "fontFamily": "inherit", "fontSize": "inherit", "lineHeight": "inherit" },
+				":hover": { "color": { "background": "var(--color-primary-hover, oklch(from var(--color-primary) calc(l + 0.08 * clamp(-1, (l - 0.5636) * 1000, 1)) c h))" } }
+			}
+		}
+	},
+	"templateParts": [
+		{ "name": "header", "title": "Header", "area": "header" },
+		{ "name": "footer", "title": "Footer", "area": "footer" }
+	]
+}

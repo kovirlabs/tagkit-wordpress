@@ -1,0 +1,40 @@
+# A local WordPress for testing the theme: http://localhost:8888
+# THEME_DIR=../../dist/tagkit tests the release build instead of the repo.
+#   docker compose -f tests/wp/docker-compose.yml up -d
+#   sh tests/wp/setup.sh
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+  wordpress:
+    image: wordpress:php8.3-apache
+    depends_on: [db]
+    ports: ["8888:80"]
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: "1"
+    volumes:
+      - wp:/var/www/html
+      - ${THEME_DIR:-../..}:/var/www/html/wp-content/themes/tagkit:ro
+  cli:
+    image: wordpress:cli-php8.3
+    depends_on: [wordpress]
+    user: "33:33"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp:/var/www/html
+      - ${THEME_DIR:-../..}:/var/www/html/wp-content/themes/tagkit:ro
+    entrypoint: ["sleep", "infinity"]
+volumes:
+  wp:

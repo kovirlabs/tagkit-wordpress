@@ -1,0 +1,13 @@
+# The release zip is built from an allowlist in scripts/zip.mjs; this file
+# documents what stays out for tools that read .distignore.
+.github
+node_modules
+tests
+scripts
+dist
+package.json
+package-lock.json
+playwright.config.mjs
+CLAUDE.md
+README.md
+CHANGELOG.md

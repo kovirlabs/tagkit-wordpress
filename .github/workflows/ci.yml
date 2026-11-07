@@ -1,0 +1,49 @@
+name: CI
+
+# Builds the release zip, runs it in a real WordPress with the Theme Unit
+# Test content, then runs Theme Check and the Playwright tests against it.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Bundled TagBrush.css and TagAction match package.json
+        run: |
+          npm run assets
+          git diff --exit-code assets/ || (echo "::error::assets/ is out of date. Run 'npm run assets' and commit the result." && exit 1)
+
+      - run: npm run zip
+
+      - name: Start WordPress with the release build
+        run: |
+          THEME_DIR=../../dist/tagkit docker compose -f tests/wp/docker-compose.yml up -d
+          sh tests/wp/setup.sh
+        timeout-minutes: 10
+
+      - name: Theme Check
+        run: sh tests/wp/theme-check.sh
+
+      - run: npx playwright install --with-deps chromium
+        timeout-minutes: 5
+
+      - run: npx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tagkit-wordpress-zip
+          path: dist/tagkit.zip

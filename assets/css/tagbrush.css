@@ -1,0 +1,1716 @@
+/*
+ * TagBrush.css v1.1.0 - A lightweight, no-build CSS library for static sites and any framework
+ * https://github.com/kovirlabs/tagbrush
+ *
+ * Everything lives inside the `tagbrush` cascade layer, so any CSS you write
+ * outside a layer overrides it automatically, whatever its specificity.
+ * Attribute and state selectors are wrapped in :where() to keep specificity
+ * low for anyone who loads TagBrush.css into a layer of their own.
+ */
+
+@layer tagbrush {
+
+  /* ==========================================================================
+     Theme Variables
+     --------------------------------------------------------------------------
+     Override any of these on :root in your own CSS. Colors use light-dark(),
+     so each one carries a light and a dark value. If you override a color
+     with a single value, set it with light-dark() too, or pin the page to one
+     scheme with `:root { color-scheme: light; }`.
+     ========================================================================== */
+  :root {
+    color-scheme: light dark;
+
+    /* Colors */
+    --color-primary: #2563eb;
+    /* Neutrals carry a faint tint of the primary's hue, so one color gives
+       the whole page a matching palette. The tint scales with the primary's
+       chroma: a gray or black primary gives pure grays. */
+    --color-background: light-dark(#ffffff, oklch(from var(--color-primary) 0.21 calc(c * 0.15) h));
+    --color-surface: light-dark(oklch(from var(--color-primary) 0.967 calc(c * 0.02) h), oklch(from var(--color-primary) 0.278 calc(c * 0.14) h));
+    --color-text: light-dark(oklch(from var(--color-primary) 0.278 calc(c * 0.14) h), oklch(from var(--color-primary) 0.967 calc(c * 0.02) h));
+    --color-text-muted: light-dark(oklch(from var(--color-primary) 0.528 calc(c * 0.08) h), oklch(from var(--color-primary) 0.714 calc(c * 0.09) h));
+    --color-border: light-dark(oklch(from var(--color-primary) 0.928 calc(c * 0.03) h), oklch(from var(--color-primary) 0.373 calc(c * 0.15) h));
+    --color-highlight: light-dark(#fef08a, #713f12);
+    --color-error: light-dark(#dc2626, #f87171);
+    --color-success: light-dark(#16a34a, #4ade80);
+    --color-warning: light-dark(#d97706, #fbbf24);
+    --color-heading: var(--color-text);
+
+    /*
+     * Optional, derived automatically when unset:
+     *   --color-on-primary      (default: white or black, whichever is more readable on --color-primary)
+     *   --color-link            (default: --color-primary, darkened in light mode / lightened in
+     *                            dark mode as far as needed to stay readable on the background)
+     *   --color-link-hover      (default: link color, darkened in light mode / lightened in dark mode)
+     *   --color-primary-hover   (default: primary, darker under white text / lighter under black text)
+     *   --focus-ring-color      (default: primary at 50% opacity)
+     *   --color-marker          (default: --color-text-muted; list bullets and numbers)
+     */
+
+    /* Typography */
+    --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --font-family-heading: var(--font-family-base);
+    --font-size-base: 1rem;
+    --font-size-sm: 0.875rem;
+    --font-size-h1: clamp(1.875rem, 1.5rem + 1.5vw, 2.5rem);  /* grows with the screen */
+    --font-size-h2: clamp(1.5rem, 1.3rem + 1vw, 1.875rem);
+    --font-size-h3: 1.5rem;
+    --font-size-h4: 1.25rem;
+    --font-size-h5: 1.125rem;
+    --font-size-h6: 1rem;
+    --font-weight-heading: 600;
+    --line-height: 1.6;
+    --line-height-heading: 1.2;
+
+    /* Sizing & Spacing: change --spacing to scale every gap at once */
+    --spacing: 1rem;
+    --spacing-xs: calc(var(--spacing) * 0.25);
+    --spacing-sm: calc(var(--spacing) * 0.5);
+    --spacing-md: var(--spacing);
+    --spacing-lg: calc(var(--spacing) * 1.5);
+    --spacing-xl: calc(var(--spacing) * 2);
+    --container-max-width: 1200px;
+    --reading-width: 70ch; /* comfortable line length for long text */
+    --container-padding: var(--spacing-md);
+    --grid-min-column: 16rem;
+    --grid-gap: var(--spacing-lg);
+
+    /* Borders & Effects */
+    --border-radius: 0.375rem;
+    --border-width: 1px;
+    --focus-ring-width: 3px;
+    --shadow: 0 1px 3px rgb(0 0 0 / 0.1), 0 1px 2px rgb(0 0 0 / 0.06);
+    --shadow-lg: 0 10px 25px rgb(0 0 0 / 0.15), 0 4px 10px rgb(0 0 0 / 0.1);
+    --transition-duration: 0.15s;
+
+    /* Code highlighting: token colors for Prism, highlight.js, Hugo/Chroma,
+       Jekyll/Rouge, Pygments and Shiki's css-variables theme. Each meets
+       4.5:1 on --color-surface in its scheme. */
+    --code-comment: var(--color-text-muted);
+    --code-keyword: light-dark(#7c3aed, #c4b5fd);
+    --code-string: light-dark(#15803d, #86efac);
+    --code-function: light-dark(#1d4ed8, #93c5fd);
+    --code-constant: light-dark(#b45309, #fcd34d);
+    --code-tag: light-dark(#be123c, #fda4af);
+
+    /* Shiki's css-variables theme reads these */
+    --shiki-foreground: var(--color-text);
+    --shiki-background: var(--color-surface);
+    --shiki-token-comment: var(--code-comment);
+    --shiki-token-keyword: var(--code-keyword);
+    --shiki-token-string: var(--code-string);
+    --shiki-token-string-expression: var(--code-string);
+    --shiki-token-function: var(--code-function);
+    --shiki-token-constant: var(--code-constant);
+    --shiki-token-parameter: var(--color-text);
+    --shiki-token-punctuation: var(--color-text);
+    --shiki-token-link: var(--code-string);
+
+    /* Components: default to the global tokens above */
+    --button-padding: var(--spacing-sm) var(--spacing-md);
+    --button-radius: var(--border-radius);
+    --button-font-weight: 500;
+    --input-padding: var(--spacing-sm) var(--spacing-md);
+    --input-radius: var(--border-radius);
+    --card-padding: var(--spacing-lg);
+    --card-radius: var(--border-radius);
+  }
+
+  /* Force a color scheme for the whole page or any subtree:
+     <html data-theme="dark">  or  <section data-theme="light"> */
+  [data-theme="light"] { color-scheme: light; }
+  [data-theme="dark"] { color-scheme: dark; }
+
+  [data-theme] {
+    background-color: var(--color-background);
+    color: var(--color-text);
+  }
+
+  /* ==========================================================================
+     Reset & Base Styles
+     ========================================================================== */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    tab-size: 4;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    overflow-wrap: break-word; /* long URLs and words wrap instead of widening the page */
+  }
+
+  :where([hidden]:not([hidden="until-found"])) {
+    display: none !important;
+  }
+
+  :where(:target) {
+    scroll-margin-top: var(--spacing-xl);
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+  }
+
+  :where(:focus-visible) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color, color-mix(in srgb, var(--color-primary) 50%, transparent));
+    outline-offset: 2px;
+  }
+
+  /* ==========================================================================
+     Typography
+     ========================================================================== */
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-heading);
+    line-height: var(--line-height-heading);
+    color: var(--color-heading);
+    text-wrap: balance;
+  }
+
+  h1 { font-size: var(--font-size-h1); letter-spacing: -0.02em; }
+  h2 { font-size: var(--font-size-h2); letter-spacing: -0.015em; }
+  h3 { font-size: var(--font-size-h3); }
+  h4 { font-size: var(--font-size-h4); }
+  h5 { font-size: var(--font-size-h5); }
+  h6 { font-size: var(--font-size-h6); }
+
+  /* Give headings breathing room when they follow body content */
+  :not(h1, h2, h3, h4, h5, h6, hgroup > *) + :is(h2, h3, h4, h5, h6) {
+    margin-top: var(--spacing-xl);
+  }
+
+  /* A section that follows other content starts with some room above it */
+  :where(:not(h1, h2, h3, h4, h5, h6, hgroup) + section) {
+    margin-top: var(--spacing-xl);
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    text-wrap: pretty;
+  }
+
+  :where(a) {
+    color: var(--color-link, light-dark(oklch(from var(--color-primary) min(l, 0.5) c h), oklch(from var(--color-primary) max(l, 0.77) min(c, 0.15) h)));
+    text-decoration: none;
+    text-underline-offset: 0.15em;
+  }
+
+  /* Links inside running text are underlined, softly until hovered, so they
+     don't rely on color alone. Navigation and button links are not. */
+  :where(:is(p, li, dd, td, th, figcaption, caption, address, blockquote) a:not(.button)):where(:not(nav *)) {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  }
+
+  :where(a:hover) {
+    text-decoration-color: currentColor;
+    color: var(--color-link-hover, color-mix(in srgb, var(--color-link, light-dark(oklch(from var(--color-primary) min(l, 0.5) c h), oklch(from var(--color-primary) max(l, 0.77) min(c, 0.15) h))), light-dark(black, white) 20%));
+    text-decoration: underline;
+  }
+
+  b, strong {
+    font-weight: bolder;
+  }
+
+  small {
+    font-size: var(--font-size-sm);
+  }
+
+  mark {
+    padding: 0 0.2em;
+    border-radius: 0.2em;
+    background-color: var(--color-highlight);
+    color: inherit;
+  }
+
+  /* Full-contrast text, since the tint lowers contrast for inherited muted text */
+  del {
+    color: var(--color-text);
+    background-color: color-mix(in srgb, var(--color-error) 15%, transparent);
+    text-decoration-color: var(--color-error);
+  }
+
+  ins {
+    color: var(--color-text);
+    background-color: color-mix(in srgb, var(--color-success) 15%, transparent);
+    text-decoration: none;
+  }
+
+  s {
+    color: var(--color-text-muted);
+  }
+
+  dfn {
+    font-weight: 600;
+  }
+
+  output {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  address {
+    margin-bottom: var(--spacing-md);
+    font-style: normal;
+  }
+
+  :where(abbr[title]) {
+    text-decoration: underline dotted;
+    text-underline-offset: 0.15em;
+    cursor: help;
+  }
+
+  sub, sup {
+    position: relative;
+    font-size: 75%;
+    line-height: 0;
+    vertical-align: baseline;
+  }
+
+  sub { bottom: -0.25em; }
+  sup { top: -0.5em; }
+
+  hr {
+    height: 0;
+    margin: var(--spacing-xl) 0;
+    border: 0;
+    border-top: var(--border-width) solid var(--color-border);
+    color: inherit;
+  }
+
+  blockquote {
+    margin: 0 0 var(--spacing-md) 0;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-left: 4px solid color-mix(in oklab, var(--color-primary) 45%, var(--color-border));
+    color: var(--color-text-muted);
+    background-color: var(--color-surface);
+  }
+
+  blockquote > :last-child {
+    margin-bottom: 0;
+  }
+
+  :where(blockquote) footer {
+    margin-top: var(--spacing-sm);
+  }
+
+  :where(blockquote footer)::before {
+    content: "— ";
+  }
+
+  /* Heading with a subtitle: <hgroup><h2>Title</h2><p>Subtitle</p></hgroup> */
+  hgroup {
+    margin-bottom: var(--spacing-md);
+  }
+
+  hgroup > * {
+    margin-bottom: 0;
+  }
+
+  hgroup > :not(:first-child) {
+    margin-top: var(--spacing-xs);
+    color: var(--color-text-muted);
+    font-weight: 400;
+  }
+
+  code, pre, kbd, samp {
+    font-family: var(--font-family-mono);
+    font-size: 0.875em;
+  }
+
+  code, pre {
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius);
+  }
+
+  code {
+    padding: 0.125rem 0.25rem;
+  }
+
+  pre {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    overflow-x: auto;
+  }
+
+  pre code {
+    background-color: transparent;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  kbd {
+    padding: 0.125rem 0.375rem;
+    border: var(--border-width) solid var(--color-border);
+    border-bottom-width: 2px;
+    border-radius: var(--border-radius);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    white-space: nowrap;
+  }
+
+  /* ==========================================================================
+     Code Highlighting
+     --------------------------------------------------------------------------
+     Syntax highlighters wrap tokens in classes like .token.keyword (Prism),
+     .hljs-keyword (highlight.js), .k (Pygments, Rouge, Hugo's Chroma) or
+     .kw (Pandoc).
+     These come from the tool, not from you, so they're styled here and
+     follow the theme and dark mode. A highlighter theme you load yourself
+     still wins: every selector has zero specificity.
+     ========================================================================== */
+  :where(
+    .token:is(.comment, .prolog, .doctype, .cdata),
+    .hljs-comment, .hljs-quote,
+    :is(.highlight, .chroma) :is(.c, .c1, .cm, .ch, .cd, .cs, .cpf),
+    .sourceCode :is(.co, .do, .an, .cv, .in)
+  ) {
+    color: var(--code-comment);
+    font-style: italic;
+  }
+
+  :where(
+    .token:is(.keyword, .atrule, .important),
+    .hljs-keyword, .hljs-meta .hljs-keyword, .hljs-doctag,
+    :is(.highlight, .chroma) :is(.k, .kd, .kn, .kp, .kr, .kt, .ow, .cp),
+    .sourceCode :is(.kw, .cf, .im, .pp)
+  ) {
+    color: var(--code-keyword);
+  }
+
+  :where(
+    .token:is(.string, .char, .attr-value, .regex, .url),
+    .hljs-string, .hljs-regexp, .hljs-template-variable, .hljs-link,
+    :is(.highlight, .chroma) :is(.s, .s1, .s2, .sa, .sb, .sc, .sd, .se, .sh, .si, .sx, .sr, .ss, .dl),
+    .sourceCode :is(.st, .ch, .vs, .ss, .sc)
+  ) {
+    color: var(--code-string);
+  }
+
+  :where(
+    .token:is(.function, .class-name),
+    .hljs-title, .hljs-section,
+    :is(.highlight, .chroma) :is(.nf, .fm, .nc, .nn, .nd),
+    .sourceCode .fu
+  ) {
+    color: var(--code-function);
+  }
+
+  :where(
+    .token:is(.number, .boolean, .constant, .symbol),
+    .hljs-number, .hljs-literal, .hljs-built_in, .hljs-symbol, .hljs-bullet,
+    :is(.highlight, .chroma) :is(.m, .mi, .mf, .mh, .mo, .mb, .il, .kc, .nb, .bp),
+    .sourceCode :is(.dv, .bn, .fl, .cn, .bu)
+  ) {
+    color: var(--code-constant);
+  }
+
+  :where(
+    .token:is(.tag, .property, .attr-name, .selector, .builtin, .variable),
+    .hljs-name, .hljs-tag, .hljs-attr, .hljs-attribute, .hljs-property, .hljs-variable, .hljs-selector-tag, .hljs-selector-class, .hljs-selector-id, .hljs-type,
+    :is(.highlight, .chroma) :is(.nt, .na, .nv, .vc, .vg, .vi, .py, .no),
+    .sourceCode :is(.va, .at, .dt)
+  ) {
+    color: var(--code-tag);
+  }
+
+  /* Diff lines keep normal text on a tinted background, like most code hosts */
+  :where(.token.deleted, .hljs-deletion, :is(.highlight, .chroma) .gd) {
+    color: var(--color-text);
+    background-color: color-mix(in srgb, var(--color-error) 12%, transparent);
+  }
+
+  :where(.token.inserted, .hljs-addition, :is(.highlight, .chroma) .gi) {
+    color: var(--color-text);
+    background-color: color-mix(in srgb, var(--color-success) 12%, transparent);
+  }
+
+  :where(.token.bold, .hljs-strong, :is(.highlight, .chroma) .gs) { font-weight: bold; }
+  :where(.token.italic, .hljs-emphasis, :is(.highlight, .chroma) .ge) { font-style: italic; }
+
+  /* Shiki with two themes and defaultColor: false writes --shiki-light and
+     --shiki-dark on every token. Pick the one for the current scheme. Matched
+     by the variable rather than a class, because tools built on Shiki use
+     their own classes (Astro's is .astro-code). */
+  :where([style*="--shiki-light"]) {
+    color: light-dark(var(--shiki-light, currentColor), var(--shiki-dark, currentColor));
+  }
+
+  /* Element-level specificity so it beats the default pre background */
+  pre:where([style*="--shiki-light-bg"]) {
+    background-color: light-dark(var(--shiki-light-bg, var(--color-surface)), var(--shiki-dark-bg, var(--color-surface)));
+  }
+
+  /* ==========================================================================
+     Lists
+     ========================================================================== */
+  ul, ol, menu {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-xl);
+  }
+
+  li > ul, li > ol {
+    margin-bottom: 0;
+  }
+
+  li::marker {
+    color: var(--color-marker, var(--color-text-muted));
+  }
+
+  /* Footnotes as Markdown tools write them: GitHub and markdown-it
+     (data-footnotes, .footnotes) and Pandoc (role="doc-endnotes") */
+  :where([data-footnotes], [role="doc-endnotes"], .footnotes) {
+    margin-top: var(--spacing-xl);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  :where([data-footnotes], [role="doc-endnotes"], .footnotes) :where(:target) {
+    background-color: color-mix(in srgb, var(--color-highlight) 50%, transparent);
+  }
+
+  dl {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+  }
+
+  dt {
+    font-weight: 600;
+  }
+
+  dd {
+    margin: 0 0 var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* ==========================================================================
+     Media
+     ========================================================================== */
+  img, picture, video, canvas, svg, iframe, object, embed {
+    max-width: 100%;
+  }
+
+  audio {
+    display: block;
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+  }
+
+  img, video {
+    height: auto;
+    vertical-align: middle;
+  }
+
+  /* An SVG with a width attribute and a viewBox keeps its proportions when
+     max-width shrinks it. SVGs without a viewBox have no ratio to keep, and
+     preserveAspectRatio="none" means the author wants it to stretch. */
+  :where(svg[viewBox][width]:not([preserveAspectRatio="none"])) {
+    height: auto;
+  }
+
+  figure {
+    margin: 0 0 var(--spacing-md) 0;
+  }
+
+  :where(figure > img, figure > picture img, figure > video) {
+    display: block;
+    border-radius: var(--border-radius);
+  }
+
+  figcaption {
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  /* A <figure> around a wide table makes it scroll instead of overflowing */
+  /* position: relative keeps absolutely positioned content, such as a
+     .visually-hidden label in a header cell, inside the scrolling area
+     instead of widening the page */
+  :where(figure:has(> table)) {
+    position: relative;
+    overflow-x: auto;
+  }
+
+  /* ==========================================================================
+     Page Structure
+     ========================================================================== */
+  :where(nav) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+  }
+
+  nav ul, nav ol, nav menu {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav :is(input, select, textarea, label) {
+    margin-bottom: 0;
+  }
+
+  :where(nav [aria-current]:not([aria-current="false"])) {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  /* Previous/next links: <a rel="next"> moves to the far end of the row */
+  :where(nav li:has(> a[rel~="next"])) {
+    margin-inline-start: auto;
+  }
+
+  :where(nav:has(a[rel~="prev"], a[rel~="next"])) :is(ul, ol) {
+    flex-grow: 1;
+  }
+
+  /* Breadcrumbs: <nav aria-label="Breadcrumb"><ol><li><a>…</a></li>…</ol></nav> */
+  nav:where([aria-label="breadcrumb" i], [aria-label="breadcrumbs" i]) :is(ol, ul) {
+    gap: var(--spacing-sm);
+  }
+
+  :where(nav:is([aria-label="breadcrumb" i], [aria-label="breadcrumbs" i])) li + li::before {
+    content: "/";
+    content: "/" / "";
+    margin-inline-end: var(--spacing-sm);
+    color: var(--color-marker, var(--color-text-muted));
+  }
+
+  :where(nav:is([aria-label="breadcrumb" i], [aria-label="breadcrumbs" i]) [aria-current]:not([aria-current="false"])) {
+    font-weight: inherit;
+  }
+
+  :where(body > header, body > main, body > footer) {
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+  }
+
+  :where(footer) {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  :where(search) {
+    display: block;
+  }
+
+  /* An <aside> inside an article reads as a callout */
+  :where(article aside) {
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-left: 4px solid var(--color-primary);
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    background-color: var(--color-surface);
+  }
+
+  :where(article aside) > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* Page layout: start */
+  /* ==========================================================================
+     Page Layout
+     --------------------------------------------------------------------------
+     No classes needed. With <body><header/><main/><footer/></body>:
+     - header, main and footer stretch edge to edge (so their backgrounds do)
+       while their content is centered within --container-max-width;
+     - the footer sits at the bottom of the window on short pages.
+     A page without <main> (for example Markdown output) is centered as a
+     whole at --reading-width, and so is a <main> holding a single <article>
+     (a blog post or a docs page), so long text keeps a comfortable line
+     length. A wrapper without a class around header/main/footer, like a
+     framework's <div id="root"> or <app-root>, counts as the page too.
+
+     Opt out with data-layout="full" on <body>, the wrapper, or any one of
+     header, main or footer. Pages that already use .container are left as
+     they are. Not included in the scoped and Shadow DOM builds.
+     ========================================================================== */
+  :where(body:has(> main, > :not([class]) > main), body > :not([class]):has(> main)):where(:not([data-layout="full"], [data-layout="full"] *)) {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+
+  :where(body, body > :not([class])) > :where(main) {
+    flex-grow: 1;
+  }
+
+  :where(body:has(> main), body > :not([class]):has(> main)) > :where(header, main, footer):where(:not([data-layout="full"], [data-layout="full"] *, :has(> .container))) {
+    padding-right: max(var(--container-padding), (100% - var(--container-max-width)) / 2 + var(--container-padding));
+    padding-left: max(var(--container-padding), (100% - var(--container-max-width)) / 2 + var(--container-padding));
+  }
+
+  /* Hairlines set the page header and footer apart from the content */
+  :where(body:has(> main), body > :not([class]):has(> main)) > :where(header):where(:not([data-layout="full"], [data-layout="full"] *)) {
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  :where(body:has(> main), body > :not([class]):has(> main)) > :where(footer):where(:not([data-layout="full"], [data-layout="full"] *)) {
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  /* Same vertical spacing as body > header/main/footer get, inside a wrapper */
+  :where(body > :not([class]):has(> main)) > :where(header, main, footer) {
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+  }
+
+  :where(body:not([data-layout="full"], :has(main, > .container))) {
+    padding-right: max(var(--container-padding), (100% - var(--reading-width)) / 2);
+    padding-left: max(var(--container-padding), (100% - var(--reading-width)) / 2);
+  }
+
+  :where(main > article:only-of-type):where(:not([data-layout="full"], [data-layout="full"] *)) {
+    max-width: var(--reading-width);
+    margin-right: auto;
+    margin-left: auto;
+  }
+  /* Sidebar layout: <aside> next to <main> (an app, a dashboard, docs).
+     The header and footer span the width, the aside is a column beside
+     main, and everything stacks on narrow screens. Content uses the full
+     width instead of being centered. */
+  :where(body, body > :not([class])):where(:has(> aside ~ main, > main ~ aside)):where(:not([data-layout="full"], [data-layout="full"] *)) {
+    display: grid;
+    grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: "header header" "aside main" "footer footer";
+    min-height: 100dvh;
+  }
+
+  :where(body, body > :not([class])):where(:has(> main ~ aside)):where(:not([data-layout="full"], [data-layout="full"] *)) {
+    grid-template-columns: minmax(0, 1fr) minmax(12rem, 16rem);
+    grid-template-areas: "header header" "main aside" "footer footer";
+  }
+
+  :where(body, body > :not([class])):where(:has(> aside ~ main, > main ~ aside)) > :where(header) { grid-area: header; }
+  :where(body, body > :not([class])):where(:has(> aside ~ main, > main ~ aside)) > :where(main) { grid-area: main; }
+  :where(body, body > :not([class])):where(:has(> aside ~ main, > main ~ aside)) > :where(footer) { grid-area: footer; }
+
+  :where(body, body > :not([class])):where(:has(> aside ~ main, > main ~ aside)) > :where(header, main, footer):where(:not(:has(> .container))) {
+    padding-right: var(--container-padding);
+    padding-left: var(--container-padding);
+  }
+
+  :where(body, body > :not([class])):where(:has(> aside ~ main, > main ~ aside)) > :where(aside) {
+    grid-area: aside;
+    padding: var(--spacing-lg) var(--container-padding);
+    border-inline-end: var(--border-width) solid var(--color-border);
+    background-color: var(--color-surface);
+  }
+
+  :where(body, body > :not([class])):where(:has(> main ~ aside)) > :where(aside) {
+    border-inline-end: 0;
+    border-inline-start: var(--border-width) solid var(--color-border);
+  }
+
+  @media (max-width: 48rem) {
+    :where(body, body > :not([class])):where(:has(> aside ~ main, > main ~ aside)):where(:not([data-layout="full"], [data-layout="full"] *)) {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto auto 1fr auto;
+      grid-template-areas: "header" "aside" "main" "footer";
+    }
+
+    :where(body, body > :not([class])):where(:has(> aside ~ main, > main ~ aside)) > :where(aside) {
+      border-inline: 0;
+      border-bottom: var(--border-width) solid var(--color-border);
+    }
+  }
+
+  /* A hero: an <hgroup> (and buttons) in the page header after the <nav> */
+  :where(body, body > :not([class]):has(> main)) > header > hgroup {
+    margin-block: var(--spacing-xl);
+    text-align: center;
+  }
+
+  :where(body, body > :not([class]):has(> main)) > header > hgroup > :first-child {
+    font-size: clamp(2.25rem, 1.6rem + 3vw, 3.5rem);
+  }
+
+  :where(body, body > :not([class]):has(> main)) > header > hgroup > :not(:first-child) {
+    max-width: var(--reading-width);
+    margin-inline: auto;
+    font-size: 1.25rem;
+  }
+
+  :where(body, body > :not([class]):has(> main)) > header > hgroup + [role="group"] {
+    justify-content: center;
+    margin-bottom: var(--spacing-xl);
+  }
+  /* Page layout: end */
+
+  /* ==========================================================================
+     Interactive Elements
+     ========================================================================== */
+  details {
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  summary {
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  summary::marker {
+    color: var(--color-marker, var(--color-text-muted));
+  }
+
+  :where(details[open] > summary) {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  details > :last-child:not(summary) {
+    margin-bottom: 0;
+  }
+
+  /* Neighboring <details> join into one accordion (exclusive with name="…") */
+  details:has(+ details) {
+    margin-bottom: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  details + details {
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  dialog {
+    width: min(100% - 2 * var(--spacing-md), 36rem);
+    padding: var(--spacing-lg);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--border-radius);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    box-shadow: var(--shadow-lg);
+  }
+
+  dialog::backdrop {
+    background-color: rgb(0 0 0 / 0.5);
+  }
+
+  dialog > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* <dialog><header>…</header> … <footer><button>…</button></footer></dialog>,
+     also inside a <form method="dialog"> that wraps the whole dialog */
+  :where(dialog, dialog > form) > header {
+    margin-bottom: var(--spacing-md);
+  }
+
+  :where(dialog, dialog > form) > header > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* A header with a close button puts the title and the button on one row */
+  :where(dialog, dialog > form) > header:where(:has(> button, > form > button)) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+  }
+
+  :where(dialog, dialog > form) > header:where(:has(> button, > form > button)) > * {
+    margin: 0;
+  }
+
+  :where(dialog, dialog > form) > footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
+    color: inherit;
+    font-size: inherit;
+  }
+
+  :where(dialog, dialog > form) > footer > * {
+    margin: 0;
+  }
+
+  progress, meter {
+    display: block;
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+    accent-color: var(--color-primary);
+  }
+
+  /* Meter: success / warning / error colors follow its low, high and optimum attributes */
+  meter {
+    height: 0.75rem;
+    border-radius: 999px;
+    background: var(--color-surface);
+    appearance: none;
+  }
+
+  meter::-webkit-meter-bar {
+    height: 0.75rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--color-surface);
+  }
+
+  meter::-webkit-meter-optimum-value { border-radius: 999px; background: var(--color-success); }
+  meter::-webkit-meter-suboptimum-value { border-radius: 999px; background: var(--color-warning); }
+  meter::-webkit-meter-even-less-good-value { border-radius: 999px; background: var(--color-error); }
+  meter:-moz-meter-optimum::-moz-meter-bar { border-radius: 999px; background: var(--color-success); }
+  meter:-moz-meter-sub-optimum::-moz-meter-bar { border-radius: 999px; background: var(--color-warning); }
+  meter:-moz-meter-sub-sub-optimum::-moz-meter-bar { border-radius: 999px; background: var(--color-error); }
+
+  /* Native popovers: <div popover id="tip">…</div> + <button popovertarget="tip"> */
+  :where([popover]) {
+    max-width: min(100% - 2 * var(--spacing-md), 24rem);
+    padding: var(--spacing-md);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--border-radius);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    box-shadow: var(--shadow-lg);
+  }
+
+  :where([popover]) > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* Loading: aria-busy="true" on a button or any container shows a spinner
+     and tells screen readers the content is updating */
+  :where([aria-busy="true"]:not(html, body, input, select, textarea, img, video, iframe, progress, meter))::before {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 0.15em solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: 50%;
+    vertical-align: -0.15em;
+    animation: tagbrush-spin 0.75s linear infinite;
+  }
+
+  :where([aria-busy="true"]:not(:empty))::before {
+    margin-inline-end: var(--spacing-sm);
+  }
+
+  @keyframes tagbrush-spin {
+    to { transform: rotate(1turn); }
+  }
+
+  /* ==========================================================================
+     Buttons
+     --------------------------------------------------------------------------
+     Variants only swap the private --_btn-* variables, so you can create
+     your own the same way:
+       .danger { --_btn-bg: var(--color-error); }
+     ========================================================================== */
+  :where(button, input:is([type="submit"], [type="button"], [type="reset"]), .button) {
+    --_btn-bg: var(--color-primary);
+    /* White text on darker primaries, black on lighter ones. 0.5636 is the OKLCH
+       lightness where white and black text have the same contrast (about 4.6:1),
+       so the chosen one always has at least that much. Hover moves away from the
+       text color so the label stays readable. */
+    --_btn-bg-hover: var(--color-primary-hover, oklch(from var(--color-primary) calc(l + 0.08 * clamp(-1, (l - 0.5636) * 1000, 1)) c h));
+    --_btn-color: var(--color-on-primary, oklch(from var(--color-primary) clamp(0, (0.5636 - l) * 1000, 1) 0 0));
+    --_btn-border: transparent;
+
+    display: inline-block;
+    font-family: inherit;
+    font-size: var(--font-size-base);
+    font-weight: var(--button-font-weight);
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: var(--border-width) solid var(--_btn-border);
+    border-radius: var(--button-radius);
+    padding: var(--button-padding);
+    background-color: var(--_btn-bg);
+    color: var(--_btn-color);
+    transition: background-color var(--transition-duration) ease-in-out,
+                border-color var(--transition-duration) ease-in-out,
+                color var(--transition-duration) ease-in-out;
+  }
+
+  :where(button, input:is([type="submit"], [type="button"], [type="reset"]), .button):where(:hover) {
+    background-color: var(--_btn-bg-hover);
+    color: var(--_btn-color);
+    text-decoration: none;
+  }
+
+  :where(button, input:is([type="submit"], [type="button"], [type="reset"]), .button):where(:active) {
+    transform: translateY(1px);
+  }
+
+  :where(button, input:is([type="submit"], [type="button"], [type="reset"]), .button):where(:disabled, [aria-disabled="true"]) {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--_btn-bg);
+    transform: none;
+  }
+
+  :where(.button[aria-disabled="true"]) {
+    pointer-events: none;
+  }
+
+  /* After the button rules so a busy button shows the progress cursor */
+  :where([aria-busy="true"]) {
+    cursor: progress;
+  }
+
+  :where(.secondary, [type="reset"]) {
+    --_btn-bg: var(--color-surface);
+    --_btn-bg-hover: var(--color-border);
+    --_btn-color: var(--color-text);
+    --_btn-border: var(--color-border);
+  }
+
+  :where(.outline) {
+    --_btn-bg: transparent;
+    --_btn-bg-hover: color-mix(in srgb, var(--color-primary) 8%, transparent);
+    --_btn-color: var(--color-link, light-dark(oklch(from var(--color-primary) min(l, 0.5) c h), oklch(from var(--color-primary) max(l, 0.77) min(c, 0.15) h)));
+    --_btn-border: var(--color-primary);
+  }
+
+  /* ==========================================================================
+     Forms
+     ========================================================================== */
+  fieldset {
+    margin: 0 0 var(--spacing-md) 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  legend {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin-bottom: var(--spacing-sm);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: inherit;
+    color: inherit;
+    white-space: normal;
+  }
+
+  label {
+    display: inline-block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+  }
+
+  /* Text-like inputs: every input type except the ones listed below */
+  :where(
+    input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"],
+              [type="submit"], [type="button"], [type="reset"], [type="image"], [type="hidden"]),
+    textarea,
+    select
+  ) {
+    display: block;
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+    padding: var(--input-padding);
+    font-family: inherit;
+    font-size: var(--font-size-base);
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-text);
+    background-color: var(--color-background);
+    background-clip: padding-box;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--input-radius);
+    caret-color: var(--color-link, light-dark(oklch(from var(--color-primary) min(l, 0.5) c h), oklch(from var(--color-primary) max(l, 0.77) min(c, 0.15) h)));
+    transition: border-color var(--transition-duration) ease-in-out,
+                box-shadow var(--transition-duration) ease-in-out;
+  }
+
+  :where(input, textarea, select):where(:focus) {
+    outline: 0;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color, color-mix(in srgb, var(--color-primary) 25%, transparent));
+  }
+
+  /* Checkboxes, radios and ranges keep the browser's focus outline */
+  :where(input:is([type="checkbox"], [type="radio"], [type="range"])):where(:focus) {
+    border-color: initial;
+    box-shadow: none;
+  }
+
+  :where(input:is([type="checkbox"], [type="radio"], [type="range"])):where(:focus-visible) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color, color-mix(in srgb, var(--color-primary) 50%, transparent));
+    outline-offset: 2px;
+  }
+
+  ::placeholder {
+    color: var(--color-text-muted);
+    opacity: 1;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  /* A textarea without a rows attribute grows with its content, starting at
+     three lines. Browsers without field-sizing keep the fixed height. */
+  :where(textarea:not([rows])) {
+    field-sizing: content;
+    min-height: calc(3lh + 2 * var(--spacing-sm) + 2 * var(--border-width));
+  }
+
+  /* Consistent dropdown arrow on single-line selects */
+  :where(select:not([multiple], [size])) {
+    padding-right: calc(var(--spacing-md) * 2.5);
+    appearance: none;
+    /* A small triangle drawn with two gradients, so it follows the theme colors */
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%),
+      linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%);
+    background-repeat: no-repeat;
+    background-position: right calc(var(--spacing-md) + 0.3125rem) center, right var(--spacing-md) center;
+    background-size: 0.3125rem 0.3125rem;
+    cursor: pointer;
+  }
+
+  :where(select[multiple], select[size]) option {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  optgroup {
+    font-weight: 600;
+  }
+
+  /* Wrapped labels: <label>Email <input type="email"></label> */
+  label:has(> :is(input:not([type="checkbox"], [type="radio"]), select, textarea)) {
+    display: block;
+    margin-bottom: 0;
+  }
+
+  :where(label) > :where(input:not([type="checkbox"], [type="radio"]), select, textarea) {
+    margin-top: var(--spacing-xs);
+    font-weight: 400;
+  }
+
+  :where(input, textarea, select):where(:disabled) {
+    background-color: var(--color-surface);
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+  }
+
+  /* Read-only fields look fixed but keep full-contrast, selectable text */
+  :where(input[readonly], textarea[readonly]) {
+    background-color: var(--color-surface);
+    cursor: default;
+  }
+
+  /* Validation: aria-invalid, or native validation after the user interacts */
+  :where(input, textarea, select):where([aria-invalid="true"], :user-invalid) {
+    border-color: var(--color-error);
+  }
+
+  :where(input, textarea, select):where([aria-invalid="true"], :user-invalid):where(:focus) {
+    box-shadow: 0 0 0 var(--focus-ring-width) color-mix(in srgb, var(--color-error) 25%, transparent);
+  }
+
+  :where(input, textarea, select):where([aria-invalid="false"]) {
+    border-color: var(--color-success);
+  }
+
+  /* Help text: <small> directly after a field */
+  :where(input, textarea, select):has(+ small) {
+    margin-bottom: 0;
+  }
+
+  :where(input, textarea, select) + small {
+    display: block;
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-muted);
+  }
+
+  :where(input, textarea, select):where([aria-invalid="true"], :user-invalid) + small {
+    color: var(--color-error);
+  }
+
+  :where(input:is([type="checkbox"], [type="radio"])) {
+    width: 1.125em;
+    height: 1.125em;
+    margin: 0;
+    vertical-align: middle;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+  }
+
+  /* Markdown task lists: <li><input type="checkbox" disabled> Task</li>.
+     The checkbox takes the place of the bullet. */
+  :where(li:has(> input[type="checkbox"]:first-child)) {
+    list-style-type: none;
+  }
+
+  :where(li > input[type="checkbox"]:first-child) {
+    margin-inline: -1.5em 0.5em;
+  }
+
+  /* Toggle switch: <input type="checkbox" role="switch"> */
+  :where(input[type="checkbox"][role="switch"]) {
+    flex-shrink: 0;
+    width: 2.25em;
+    font-size: inherit; /* form controls default to a smaller font, which em sizes follow */
+    height: 1.25em;
+    border-radius: 999px;
+    appearance: none;
+    background: radial-gradient(circle closest-side, var(--color-background) calc(100% - 3px), transparent calc(100% - 2px)) 0 0 / 1.25em 1.25em no-repeat var(--color-text-muted);
+    transition: background-color var(--transition-duration) ease-in-out,
+                background-position var(--transition-duration) ease-in-out;
+  }
+
+  :where(input[type="checkbox"][role="switch"]:checked) {
+    background-color: var(--color-primary);
+    background-position: 100% 0;
+  }
+
+  :where(input[type="checkbox"][role="switch"]:dir(rtl)) {
+    background-position: 100% 0;
+  }
+
+  :where(input[type="checkbox"][role="switch"]:checked:dir(rtl)) {
+    background-position: 0 0;
+  }
+
+  :where(input[type="checkbox"][role="switch"]:disabled) {
+    opacity: 0.6;
+  }
+
+  label:has(> input:is([type="checkbox"], [type="radio"])) {
+    display: flex;
+    margin-bottom: var(--spacing-sm);
+    align-items: center;
+    gap: var(--spacing-sm);
+    width: fit-content;
+    font-weight: 400;
+    cursor: pointer;
+  }
+
+  :where(input[type="range"]) {
+    display: block;
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+    accent-color: var(--color-primary);
+    cursor: pointer;
+  }
+
+  :where(input[type="color"]) {
+    display: block;
+    width: 3rem;
+    height: 2.5rem;
+    margin-bottom: var(--spacing-md);
+    padding: 0.125rem;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--input-radius);
+    background-color: var(--color-background);
+    cursor: pointer;
+  }
+
+  :where(input[type="file"]) {
+    display: block;
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+    font-family: inherit;
+    font-size: var(--font-size-base);
+    color: var(--color-text-muted);
+  }
+
+  ::file-selector-button {
+    margin-right: var(--spacing-md);
+    padding: var(--button-padding);
+    font-family: inherit;
+    font-size: var(--font-size-base);
+    font-weight: var(--button-font-weight);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--button-radius);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: background-color var(--transition-duration) ease-in-out;
+  }
+
+  ::file-selector-button:hover {
+    background-color: var(--color-border);
+  }
+
+  :where(input[type="image"]) {
+    border-radius: var(--button-radius);
+    cursor: pointer;
+  }
+
+  /* ==========================================================================
+     Tables
+     ========================================================================== */
+  /* A table is as wide as its content, up to the available width, and
+     scrolls sideways inside itself when it's wider. That keeps wide tables
+     from Markdown, which can't be wrapped in anything, from widening the
+     page. Inside a <figure>, a table fills the width and the figure scrolls. */
+  table {
+    position: relative;
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+    border-collapse: collapse;
+  }
+
+  figure > table {
+    display: table;
+    width: 100%;
+    max-width: none;
+    overflow-x: visible;
+  }
+
+  caption {
+    padding-bottom: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-align: left;
+  }
+
+  th, td {
+    padding: var(--spacing-sm);
+    vertical-align: top;
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  /* Column alignment from Markdown (<td align="right">) still applies */
+  :where(th:not([align]), td:not([align])) {
+    text-align: start;
+  }
+
+  th {
+    vertical-align: bottom;
+    border-bottom: 2px solid var(--color-border);
+    font-weight: 600;
+  }
+
+  tbody th {
+    vertical-align: top;
+    border-bottom: 0;
+  }
+
+  :where(tbody + tbody, tfoot) {
+    border-top: 2px solid var(--color-border);
+  }
+
+  :where(tfoot td, tfoot th) {
+    font-weight: 600;
+  }
+
+  :where(.striped tbody tr:nth-child(odd)) {
+    background-color: color-mix(in srgb, var(--color-surface) 60%, transparent);
+  }
+
+  /* ==========================================================================
+     Utilities
+     ========================================================================== */
+  .container {
+    width: 100%;
+    max-width: var(--container-max-width);
+    padding-right: var(--container-padding);
+    padding-left: var(--container-padding);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  /* Responsive columns that wrap on small screens.
+     Tune per grid: <div class="grid" style="--grid-min-column: 10rem"> */
+  .grid {
+    display: grid;
+    gap: var(--grid-gap);
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-min-column), 100%), 1fr));
+    margin-bottom: var(--spacing-md);
+  }
+
+  :where(.grid) > * {
+    min-width: 0;
+  }
+
+  .card {
+    margin-bottom: var(--spacing-md);
+    padding: var(--card-padding);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--card-radius);
+    background-color: var(--color-surface);
+  }
+
+  :where(.grid) > .card {
+    margin-bottom: 0;
+  }
+
+  .card > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* Button groups and inline forms: <div role="group">…</div> */
+  :where([role="group"]) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+  }
+
+  :where([role="group"]) > * {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  :where([role="group"]) > :where(input:not([type="checkbox"], [type="radio"], [type="color"]), select) {
+    flex: 1 1 12rem;
+    width: auto;
+  }
+
+  /* A <section> of two or more <article>s (posts, products, features) lays
+     them out as a grid of cards. Headings, paragraphs, a header or a footer
+     in the section span the full width above or below the cards. */
+  :where(section:has(> article + article):not(:has(> :not(article, h1, h2, h3, h4, h5, h6, hgroup, p, header, footer)))) {
+    display: grid;
+    gap: var(--grid-gap);
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-min-column), 100%), 1fr));
+    margin-bottom: var(--spacing-md);
+  }
+
+    /* A heading spans every column the grid could hold, so empty columns
+     don't collapse. With two or three articles, cap the columns at that
+     number so the cards still fill the width. */
+  :where(section:has(> article + article):not(:has(> :not(article, h1, h2, h3, h4, h5, h6, hgroup, p, header, footer)))):where(:has(> article:nth-of-type(2):last-of-type)) { --_articles: 2; }
+  :where(section:has(> article + article):not(:has(> :not(article, h1, h2, h3, h4, h5, h6, hgroup, p, header, footer)))):where(:has(> article:nth-of-type(3):last-of-type)) { --_articles: 3; }
+
+  :where(section:has(> article + article):not(:has(> :not(article, h1, h2, h3, h4, h5, h6, hgroup, p, header, footer)))):where(:has(> article:nth-of-type(2):last-of-type, > article:nth-of-type(3):last-of-type)) {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, max(var(--grid-min-column), (100% - (var(--_articles) - 1) * var(--grid-gap)) / var(--_articles))), 1fr));
+  }
+
+  :where(section:has(> article + article):not(:has(> :not(article, h1, h2, h3, h4, h5, h6, hgroup, p, header, footer)))) > :not(article) {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+
+  :where(section:has(> article + article):not(:has(> :not(article, h1, h2, h3, h4, h5, h6, hgroup, p, header, footer)))) > :where(article) {
+    min-width: 0;
+    padding: var(--card-padding);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--card-radius);
+    background-color: var(--color-surface);
+  }
+
+  :where(section:has(> article + article):not(:has(> :not(article, h1, h2, h3, h4, h5, h6, hgroup, p, header, footer)))) > article > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* ==========================================================================
+     App Patterns
+     ========================================================================== */
+
+  /* A sidebar inside <main>: <main><aside>…</aside><article>…</article></main>
+     (a docs page with a table of contents). The aside stays in view while
+     the article scrolls. */
+  :where(main:has(> aside):has(> article)) {
+    display: grid;
+    grid-template-columns: minmax(10rem, 14rem) minmax(0, 1fr);
+    gap: var(--spacing-xl);
+    align-items: start;
+  }
+
+  :where(main:has(> article ~ aside):has(> article)) {
+    grid-template-columns: minmax(0, 1fr) minmax(10rem, 14rem);
+  }
+
+  :where(main:has(> aside):has(> article)) > :where(aside) {
+    position: sticky;
+    top: var(--spacing-md);
+    max-height: calc(100dvh - 2 * var(--spacing-md));
+    overflow-y: auto;
+    font-size: var(--font-size-sm);
+  }
+
+  /* The article keeps its reading width but sits next to the sidebar */
+  :where(main:has(> aside):has(> article)) > :where(article) {
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  :where(main:has(> aside):has(> article)) > :where(:not(aside, article)) {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 48rem) {
+    :where(main:has(> aside):has(> article)) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    :where(main:has(> aside):has(> article)) > :where(aside) {
+      position: static;
+      max-height: none;
+    }
+  }
+
+  /* Navigation in a sidebar is a vertical list; the current page is highlighted */
+  :where(aside nav) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  aside nav :is(ul, ol, menu) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  /* A menu in a popover (a user menu in the top bar) is a vertical list too */
+  :where([popover] nav, nav[popover]) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  [popover] nav :is(ul, ol, menu),
+  nav[popover] :is(ul, ol, menu) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-xs);
+  }
+
+  aside nav :is(ul, ol, menu) :is(ul, ol, menu) {
+    padding-inline-start: var(--spacing-md);
+  }
+
+  :where(aside nav a) {
+    display: block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+  }
+
+  :where(aside nav a:hover) {
+    background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  }
+
+  :where(aside nav [aria-current]:not([aria-current="false"])) {
+    background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  }
+
+  /* Key numbers: a <dl> whose items are wrapped in <div>s becomes a row of
+     tiles. <dl><div><dt>Revenue</dt><dd>$84,312</dd></div>…</dl> */
+  :where(dl:has(> div)) {
+    display: grid;
+    gap: var(--spacing-md);
+    grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+  }
+
+  :where(dl:has(> div)) > div {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--card-radius);
+    background-color: var(--color-surface);
+  }
+
+  :where(dl:has(> div)) > div > dt {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+  }
+
+  :where(dl:has(> div)) > div > dd {
+    margin: var(--spacing-xs) 0 0;
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-heading);
+    line-height: var(--line-height-heading);
+    font-variant-numeric: tabular-nums;
+  }
+
+  :where(dl:has(> div)) > div > dd + dd {
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  /* A header with a title and actions: <header><h1>Users</h1><button>Invite</button></header> */
+  :where(main, article, section) header:where(:has(> :is(h1, h2, h3, h4, hgroup)):has(> :is(button, .button, [role="group"]))) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm) var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  :where(main, article, section) header:where(:has(> :is(h1, h2, h3, h4, hgroup)):has(> :is(button, .button, [role="group"]))) > * {
+    margin: 0;
+  }
+
+  /* Search and filters: <search> or <form role="search"> lays its fields in a row */
+  :where(search, form[role="search"]) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+  }
+
+  :where(search, form[role="search"]) > * {
+    margin-bottom: 0;
+  }
+
+  :where(search, form[role="search"]) > :where(input:not([type="checkbox"], [type="radio"]), select, label, [role="group"], form) {
+    flex: 1 1 12rem;
+    width: auto;
+  }
+
+  :where(search, form[role="search"]) :where(input, select) {
+    margin-bottom: 0;
+  }
+
+  /* Hide visually but keep available to screen readers */
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  /* ==========================================================================
+     Debug Mode
+     --------------------------------------------------------------------------
+     <html data-tagbrush="debug"> (or the attribute on any element) outlines
+     common mistakes inside it, so a person or an agent taking a screenshot
+     can spot them:
+       red    images without alt text, form fields without a label, buttons
+              and links without text, clickable div/span, a second <main>
+       amber  classes TagBrush.css doesn't use, inline styles other than
+              CSS variables
+     ========================================================================== */
+  :where([data-tagbrush~="debug"]) :where(
+    img:not([alt]),
+    :is(input:not([type="hidden"], [type="submit"], [type="button"], [type="reset"], [type="image"]), select, textarea):not([id], [aria-label], [aria-labelledby], [title], label *),
+    button:empty:not([aria-label], [aria-labelledby], [title]),
+    a[href]:empty:not([aria-label], [aria-labelledby], [title]),
+    :is(div, span)[onclick],
+    main ~ main:not([hidden])
+  ) {
+    outline: 3px dashed var(--color-error) !important;
+    outline-offset: 2px !important;
+  }
+
+  :where([data-tagbrush~="debug"]) :where(
+    [class]:not([class=""], .button, .secondary, .outline, .container, .grid, .card, .striped, .visually-hidden, pre *, pre, .highlight, .highlight *, [data-footnotes] *, .footnotes *),
+    [style]:not([style^="--"], [style*="; --"], [style*=";--"])
+  ) {
+    outline: 2px dotted var(--color-warning) !important;
+    outline-offset: 2px !important;
+  }
+
+  :where([data-tagbrush~="debug"]) > :where(body)::after,
+  :where(body[data-tagbrush~="debug"])::after {
+    content: "TagBrush debug · red: missing alt, label, or text · amber: unused class or inline style";
+    position: fixed;
+    right: var(--spacing-sm);
+    bottom: var(--spacing-sm);
+    z-index: 2147483647;
+    max-width: calc(100% - 2 * var(--spacing-sm));
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    background-color: var(--color-text);
+    color: var(--color-background);
+    font: 0.75rem/1.4 var(--font-family-mono);
+    pointer-events: none;
+  }
+
+  /* ==========================================================================
+     Accessibility & Media Preferences
+     ========================================================================== */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --transition-duration: 0s;
+    }
+
+    /* Keep the spinner, since it shows that something is happening, but slow it down */
+    :where([aria-busy="true"])::before {
+      animation-duration: 2s;
+    }
+  }
+
+  /* Windows High Contrast and other forced-color modes drop background
+     colors, so draw the switch with system colors instead */
+  @media (forced-colors: active) {
+    :where(input[type="checkbox"][role="switch"]) {
+      forced-color-adjust: none;
+      border: 1px solid CanvasText;
+      background-image: radial-gradient(circle closest-side, CanvasText calc(100% - 4px), transparent calc(100% - 3px));
+      background-color: Canvas;
+    }
+
+    :where(input[type="checkbox"][role="switch"]:checked) {
+      background-image: radial-gradient(circle closest-side, HighlightText calc(100% - 4px), transparent calc(100% - 3px));
+      background-color: Highlight;
+    }
+  }
+
+  @media print {
+    :root {
+      color-scheme: light;
+    }
+
+    :where(a[href^="http"])::after {
+      content: " (" attr(href) ")";
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+    }
+
+    :where(pre, blockquote, table, figure, img, details) {
+      break-inside: avoid;
+    }
+
+    :where(h1, h2, h3, h4, h5, h6) {
+      break-after: avoid;
+    }
+
+    :where(pre) {
+      white-space: pre-wrap;
+    }
+  }
+}

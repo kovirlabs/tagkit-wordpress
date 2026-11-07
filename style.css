@@ -1,0 +1,21 @@
+/*
+Theme Name: TagKit
+Theme URI: https://github.com/kovirlabs/tagkit-wordpress
+Author: Kovir Labs
+Author URI: https://labs.kovir.org
+Description: A plain, fast, accessible block theme. Your content is written as semantic HTML and styled by TagBrush.css: readable text, light and dark mode that follow the reader's system, and one primary color that themes the whole site. Small touches from TagAction make code blocks copyable, tables sortable, and headings linkable, without page scripts.
+Requires at least: 6.6
+Tested up to: 7.1
+Requires PHP: 7.4
+Version: 0.1.0
+License: GNU General Public License v3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
+Text Domain: tagkit
+Tags: blog, one-column, block-styles, custom-colors, editor-style, full-site-editing, block-patterns, wide-blocks, threaded-comments, translation-ready, style-variations
+
+TagKit WordPress theme, Copyright 2026 Kovir Labs.
+TagKit is distributed under the terms of the GNU GPL v3 or later.
+
+The styles live in assets/css/: tagbrush.css (TagBrush.css) and wordpress.css
+(the WordPress block compatibility layer). This file only holds the theme header.
+*/
