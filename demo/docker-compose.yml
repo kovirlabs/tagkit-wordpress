@@ -1,0 +1,45 @@
+# A demo WordPress site with the TagKit theme and realistic content.
+#   docker compose -f demo/docker-compose.yml up -d && sh demo/setup.sh
+# Then open http://localhost:8890 (admin: http://localhost:8890/wp-admin, admin / admin).
+# It shows up in Docker Desktop as the "tagkit-demo" project.
+name: tagkit-demo
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+    volumes:
+      - db:/var/lib/mysql
+  wordpress:
+    image: wordpress:php8.3-apache
+    depends_on: [db]
+    ports: ["8890:80"]
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp:/var/www/html
+      - ..:/var/www/html/wp-content/themes/tagkit:ro
+      - ./content:/content:ro
+  cli:
+    image: wordpress:cli-php8.3
+    depends_on: [wordpress]
+    user: "33:33"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp:/var/www/html
+      - ..:/var/www/html/wp-content/themes/tagkit:ro
+      - ./content:/content:ro
+    entrypoint: ["sleep", "infinity"]
+volumes:
+  wp:
+  db:

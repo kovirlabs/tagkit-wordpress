@@ -82,6 +82,12 @@
 	list-style: none;
 }
 
+/* With fewer posts than columns, the cards fill the row (like TagBrush.css's
+   article grid) instead of leaving empty columns */
+.wp-block-post-template.is-layout-grid {
+	grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+}
+
 :where(.wp-block-post-template.is-layout-grid) > :where(.wp-block-post) {
 	min-width: 0;
 	padding: var(--card-padding);
@@ -138,15 +144,16 @@
    Blocks whose WordPress styles differ from TagBrush.css
    ========================================================================== */
 
-/* Tables: hairlines between rows instead of a box around every cell */
-.wp-block-table :where(td, th) {
+/* Tables: hairlines between rows instead of a box around every cell.
+   :is() matches the specificity of core's ".wp-block-table td" so this wins. */
+.wp-block-table :is(td, th) {
 	padding: var(--spacing-sm);
 	border-width: var(--border-width) 0 0;
 	border-style: solid;
 	border-color: var(--color-border);
 }
 
-.wp-block-table :where(th) {
+.wp-block-table :is(th) {
 	border-bottom-width: 2px;
 }
 
@@ -316,4 +323,10 @@
 
 .wp-block-calendar table:not(.has-background) th {
 	background-color: var(--color-surface);
+}
+
+/* WordPress limits comments to 65,525 characters; a counter for that limit
+   is only noise */
+:where(#comment) + [data-tag="count"] {
+	display: none;
 }

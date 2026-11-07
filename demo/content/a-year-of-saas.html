@@ -1,0 +1,65 @@
+<!-- wp:paragraph -->
+<p>A year ago I launched a small tool that turns CSV exports into readable reports. Today it has 340 paying customers, two of whom I've met in person. Here is what mattered, and what didn't.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="charge-from-day-one">Charge from day one</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>My free beta taught me almost nothing. The week I added a price, people started telling me what was missing.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:quote -->
+<blockquote class="wp-block-quote"><!-- wp:paragraph -->
+<p>Free users give you compliments. Paying users give you feedback.</p>
+<!-- /wp:paragraph --><cite>A friend, far too late</cite></blockquote>
+<!-- /wp:quote -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="boring-technology-wins">Boring technology wins</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The whole app is one server, one database, and a cron job. The deploy script fits on a postcard:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>git pull
+npm ci --omit=dev
+systemctl restart reports</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="the-numbers">The numbers</h2>
+<!-- /wp:heading -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><thead><tr><th>Quarter</th><th>Customers</th><th>Revenue</th><th>Churn</th></tr></thead><tbody><tr><td>Q1</td><td>42</td><td>$1,260</td><td>9%</td></tr><tr><td>Q2</td><td>118</td><td>$3,540</td><td>6%</td></tr><tr><td>Q3</td><td>226</td><td>$6,780</td><td>5%</td></tr><tr><td>Q4</td><td>340</td><td>$10,200</td><td>4%</td></tr></tbody></table><figcaption class="wp-element-caption">Click a column header to sort.</figcaption></figure>
+<!-- /wp:table -->
+
+<!-- wp:details -->
+<details class="wp-block-details"><summary>How I count revenue</summary><!-- wp:paragraph -->
+<p>Monthly recurring revenue at the end of each quarter, before payment fees and taxes.</p>
+<!-- /wp:paragraph --></details>
+<!-- /wp:details -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="whats-next">What's next</h2>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Hire a part-time support person</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>Publish the roadmap</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>Still no free plan</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/about/">Read more about me</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->

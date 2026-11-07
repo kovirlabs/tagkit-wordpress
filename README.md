@@ -22,6 +22,16 @@ TagBrush.css styles plain HTML from its own cascade layer. WordPress wraps the p
 
 `theme.json` maps the Site Editor's Primary color into `--color-primary`, sets the content width to TagBrush.css's reading width, and styles WordPress's buttons with TagBrush.css's button colors.
 
+## See it
+
+A demo site with realistic posts runs in Docker (it appears in Docker Desktop as `tagkit-demo`):
+
+```sh
+docker compose -f demo/docker-compose.yml up -d && sh demo/setup.sh
+```
+
+Open http://localhost:8890 (admin at http://localhost:8890/wp-admin, admin / admin). It uses the theme from this folder, so CSS changes show on reload. Stop it with `docker compose -f demo/docker-compose.yml down` (add `-v` to delete its content).
+
 ## Development
 
 ```sh
