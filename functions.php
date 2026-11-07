@@ -62,7 +62,7 @@ if ( ! function_exists( 'tagkit_enqueue_assets' ) ) {
 		$suffix  = tagkit_asset_suffix();
 		$version = wp_get_theme()->get( 'Version' );
 
-		wp_enqueue_style( 'tagkit-tagbrush', get_theme_file_uri( "assets/css/tagbrush{$suffix}.css" ), array(), '1.1.0' );
+		wp_enqueue_style( 'tagkit-tagbrush', get_theme_file_uri( "assets/css/tagbrush{$suffix}.css" ), array(), '1.2.0' );
 		wp_enqueue_style( 'tagkit', get_theme_file_uri( 'assets/css/wordpress.css' ), array( 'tagkit-tagbrush' ), $version );
 
 		if ( tagkit_needs_tagaction() ) {

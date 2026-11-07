@@ -1,5 +1,5 @@
 /*
- * TagBrush.css v1.1.0 - A lightweight, no-build CSS library for static sites and any framework
+ * TagBrush.css v1.2.0 - A lightweight, no-build CSS library for static sites and any framework
  * https://github.com/kovirlabs/tagbrush
  *
  * Everything lives inside the `tagbrush` cascade layer, so any CSS you write
@@ -83,6 +83,7 @@
     --focus-ring-width: 3px;
     --shadow: 0 1px 3px rgb(0 0 0 / 0.1), 0 1px 2px rgb(0 0 0 / 0.06);
     --shadow-lg: 0 10px 25px rgb(0 0 0 / 0.15), 0 4px 10px rgb(0 0 0 / 0.1);
+    --hero-background: radial-gradient(ellipse 80% 70% at 50% 0%, color-mix(in oklab, var(--color-primary) 9%, transparent), transparent); /* behind a hero; none to turn off */
     --transition-duration: 0.15s;
 
     /* Code highlighting: token colors for Prism, highlight.js, Hugo/Chroma,
@@ -239,6 +240,27 @@
     color: inherit;
   }
 
+  /* Status tones: data-tone="success|warning|error|info|neutral" sets --tone,
+     or set --tone to any color yourself (style="--tone: #db2777"). A <mark>
+     with a tone is a badge; an <aside> callout takes the tone's color. */
+  :where([data-tone="success"]) { --tone: var(--color-success); }
+  :where([data-tone="warning"]) { --tone: var(--color-warning); }
+  :where([data-tone="error"]) { --tone: var(--color-error); }
+  :where([data-tone="info"]) { --tone: var(--color-link, light-dark(oklch(from var(--color-primary) min(l, 0.5) c h), oklch(from var(--color-primary) max(l, 0.77) min(c, 0.15) h))); }
+  :where([data-tone="neutral"]) { --tone: var(--color-text-muted); }
+
+  /* The text mixes the tone with the text color, so it stays readable on the
+     tinted background in both schemes, whatever the tone. */
+  mark:where([data-tone], [style*="--tone"]) {
+    padding: 0.1em 0.6em;
+    border-radius: 1em;
+    background-color: color-mix(in oklab, var(--tone) 15%, transparent);
+    color: color-mix(in oklab, var(--tone) 55%, var(--color-text));
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
   /* Full-contrast text, since the tint lowers contrast for inherited muted text */
   del {
     color: var(--color-text);
@@ -323,10 +345,21 @@
     margin-bottom: 0;
   }
 
-  hgroup > :not(:first-child) {
+  /* Only the heading keeps full weight: the paragraphs are muted */
+  hgroup > :not(h1, h2, h3, h4, h5, h6) {
     margin-top: var(--spacing-xs);
     color: var(--color-text-muted);
     font-weight: 400;
+  }
+
+  /* A label before the heading: <hgroup><p>Pricing</p><h2>…</h2></hgroup> */
+  hgroup > :not(h1, h2, h3, h4, h5, h6):has(~ :is(h1, h2, h3, h4, h5, h6)) {
+    margin: 0 0 var(--spacing-xs);
+    color: var(--color-link, light-dark(oklch(from var(--color-primary) min(l, 0.5) c h), oklch(from var(--color-primary) max(l, 0.77) min(c, 0.15) h)));
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
   code, pre, kbd, samp {
@@ -348,6 +381,7 @@
     margin-bottom: var(--spacing-md);
     padding: var(--spacing-md);
     overflow-x: auto;
+    min-block-size: calc(1lh + 2 * var(--spacing-md)); /* no jump when a streamed code block starts empty */
   }
 
   pre code {
@@ -525,6 +559,21 @@
     height: auto;
   }
 
+  /* Icons: an inline <svg> without width or height in a button, link, label,
+     heading, list item or badge is sized to the text and sits on its line. */
+  :where(button, .button, a, summary, label, legend, h1, h2, h3, h4, h5, h6, li, dt, th, td, mark, strong, small) > svg:where(:not([width], [height])) {
+    flex-shrink: 0;
+    width: 1.25em;
+    height: 1.25em;
+    vertical-align: -0.25em;
+  }
+
+  :where(mark, small) > svg:where(:not([width], [height])) {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+  }
+
   figure {
     margin: 0 0 var(--spacing-md) 0;
   }
@@ -625,6 +674,11 @@
     border-left: 4px solid var(--color-primary);
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
     background-color: var(--color-surface);
+  }
+
+  :where(article aside:is([data-tone], [style*="--tone"])) {
+    border-left-color: var(--tone);
+    background-color: color-mix(in oklab, var(--tone) 12%, var(--color-background));
   }
 
   :where(article aside) > :last-child {
@@ -740,17 +794,40 @@
     }
   }
 
-  /* A hero: an <hgroup> (and buttons) in the page header after the <nav> */
+  /* Full-height sidebar: with the <aside> before the <header>, the sidebar
+     runs the full height of the window and the header is a top bar beside it.
+     <body><aside>…</aside><header>…</header><main>…</main></body> */
+  @media (width > 48rem) {
+    :where(body, body > :not([class])):where(:has(> aside + header ~ main)):where(:not([data-layout="full"], [data-layout="full"] *)) {
+      grid-template-areas: "aside header" "aside main" "aside footer";
+    }
+
+    :where(body, body > :not([class])):where(:has(> aside + header ~ main)) > :where(aside) {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100dvh;
+      overflow-y: auto;
+    }
+  }
+
+  /* A hero: an <hgroup> (and buttons) in the page header after the <nav>,
+     on a soft wash of the primary color (--hero-background). */
+  :where(body, body > :not([class])):where(:has(> main)) > header:where(:has(> hgroup)) {
+    background-image: var(--hero-background);
+  }
+
   :where(body, body > :not([class]):has(> main)) > header > hgroup {
     margin-block: var(--spacing-xl);
     text-align: center;
   }
 
-  :where(body, body > :not([class]):has(> main)) > header > hgroup > :first-child {
+  :where(body, body > :not([class]):has(> main)) > header > hgroup > :is(h1, h2) {
     font-size: clamp(2.25rem, 1.6rem + 3vw, 3.5rem);
+    letter-spacing: -0.025em;
   }
 
-  :where(body, body > :not([class]):has(> main)) > header > hgroup > :not(:first-child) {
+  :where(body, body > :not([class]):has(> main)) > header > hgroup > :is(h1, h2) ~ * {
     max-width: var(--reading-width);
     margin-inline: auto;
     font-size: 1.25rem;
@@ -759,6 +836,98 @@
   :where(body, body > :not([class]):has(> main)) > header > hgroup + [role="group"] {
     justify-content: center;
     margin-bottom: var(--spacing-xl);
+  }
+
+  /* A hero with a picture: a <figure>, <img>, <picture> or <svg> after the
+     hgroup sits beside the text on wide screens and below it on phones. */
+  :where(body, body > :not([class])):where(:has(> main)) > header:where(:has(> hgroup):has(> figure, > img, > picture, > svg)) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--spacing-xl);
+    align-items: center;
+  }
+
+  :where(body, body > :not([class])):where(:has(> main)) > header:where(:has(> hgroup):has(> figure, > img, > picture, > svg)) > * {
+    grid-column: 1;
+  }
+
+  :where(body, body > :not([class])):where(:has(> main)) > header:where(:has(> hgroup):has(> figure, > img, > picture, > svg)) > nav {
+    grid-column: 1 / -1;
+  }
+
+  :where(body, body > :not([class])):where(:has(> main)) > header:where(:has(> hgroup):has(> figure, > img, > picture, > svg)) > hgroup {
+    grid-column: 1;
+    align-self: end;
+    text-align: start;
+  }
+
+  :where(body, body > :not([class])):where(:has(> main)) > header:where(:has(> hgroup):has(> figure, > img, > picture, > svg)) > hgroup + [role="group"] {
+    grid-column: 1;
+    align-self: start;
+    justify-content: start;
+  }
+
+  :where(body, body > :not([class])):where(:has(> main)) > header:where(:has(> hgroup):has(> figure, > img, > picture, > svg)) > hgroup > :is(h1, h2) ~ * {
+    margin-inline: 0;
+  }
+
+  :where(body, body > :not([class])):where(:has(> main)) > header:where(:has(> hgroup)) > :where(figure, img, picture, svg) {
+    grid-column: 2;
+    grid-row: 2 / span 6;
+    margin-block: var(--spacing-xl);
+  }
+
+  :where(body, body > :not([class])):where(:has(> main)) > header:where(:has(> hgroup)) > :where(img, figure > img) {
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow-lg);
+  }
+
+  @media (max-width: 48rem) {
+    :where(body, body > :not([class])):where(:has(> main)) > header:where(:has(> hgroup):has(> figure, > img, > picture, > svg)) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    :where(body, body > :not([class])):where(:has(> main)) > header:where(:has(> hgroup)) > :where(figure, img, picture, svg) {
+      grid-column: 1;
+      grid-row: auto;
+      margin-top: 0;
+    }
+  }
+
+  /* A footer with two or more <nav>s (site map columns): the navs become
+     columns of vertical links, and a last paragraph spans the width.
+     <footer><p>About</p><nav aria-label="Product"><h2>Product</h2><ul>…</ul></nav>…<p>© 2026</p></footer> */
+  :where(body, body > :not([class])):where(:has(> main)) > footer:where(:has(> nav ~ nav)) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  :where(body, body > :not([class])):where(:has(> main)) > footer:where(:has(> nav ~ nav)) > :where(:last-child:not(nav)) {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding-top: var(--spacing-md);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  :where(body, body > :not([class])):where(:has(> main)) > footer:where(:has(> nav ~ nav)) > nav {
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: var(--spacing-sm);
+  }
+
+  :where(body, body > :not([class])):where(:has(> main)) > footer:where(:has(> nav ~ nav)) > nav :is(ul, ol) {
+    flex-direction: column;
+    align-items: start;
+    gap: var(--spacing-xs);
+  }
+
+  :where(body, body > :not([class])):where(:has(> main)) > footer:where(:has(> nav ~ nav)) > nav > :is(h2, h3, h4, strong) {
+    margin: 0;
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
   }
   /* Page layout: end */
 
@@ -978,6 +1147,14 @@
     pointer-events: none;
   }
 
+  /* A button with an icon lines it up with the label */
+  :where(button, .button):where(:has(> svg)) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+  }
+
   /* After the button rules so a busy button shows the progress cursor */
   :where([aria-busy="true"]) {
     cursor: progress;
@@ -1174,6 +1351,15 @@
   }
 
   :where(li > input[type="checkbox"]:first-child) {
+    margin-inline: -1.5em 0.5em;
+  }
+
+  /* Pandoc wraps the checkbox and its text in a <label> */
+  :where(li:has(> label:first-child > input[type="checkbox"]:first-child)) {
+    list-style-type: none;
+  }
+
+  :where(li > label:first-child > input[type="checkbox"]:first-child) {
     margin-inline: -1.5em 0.5em;
   }
 
@@ -1432,6 +1618,24 @@
     margin-bottom: 0;
   }
 
+  /* Feature cards: an icon (an <svg> without width or height) first in a card
+     sits on a tinted tile. data-tone on the svg picks another color. */
+  :where(section > article > svg:first-child:not([width], [height])) {
+    display: block;
+    box-sizing: border-box;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: var(--spacing-md);
+    padding: 0.625rem;
+    border-radius: var(--border-radius);
+    color: color-mix(in oklab, var(--tone, var(--color-primary)) 75%, var(--color-text));
+    background-color: color-mix(in oklab, var(--tone, var(--color-primary)) 14%, transparent);
+  }
+
+  section > article > svg:first-child + :is(h2, h3, h4, h5, h6) {
+    margin-top: 0;
+  }
+
   /* ==========================================================================
      App Patterns
      ========================================================================== */
@@ -1608,6 +1812,108 @@
   }
 
   /* ==========================================================================
+     Chat and AI Output
+     --------------------------------------------------------------------------
+     Markdown a model writes, rendered as HTML in a chat window. Works on a
+     whole page, or with the scoped build inside each message:
+     <div class="tagbrush" data-density="compact">…rendered Markdown…</div>
+     ========================================================================== */
+
+  /* Compact density: tighter spacing and smaller headings for a chat column.
+     The spacing scale is restated so it follows the smaller --spacing here.
+     Not in :where(), so it beats :root (or the scoped build's :scope) when
+     both are on the same element, as [data-theme] does. */
+  [data-density="compact"] {
+    --spacing: 0.75rem;
+    --spacing-xs: calc(var(--spacing) * 0.25);
+    --spacing-sm: calc(var(--spacing) * 0.5);
+    --spacing-md: var(--spacing);
+    --spacing-lg: calc(var(--spacing) * 1.5);
+    --spacing-xl: calc(var(--spacing) * 2);
+    --container-padding: var(--spacing-md);
+    --grid-gap: var(--spacing-lg);
+    --button-padding: var(--spacing-sm) var(--spacing-md);
+    --input-padding: var(--spacing-sm) var(--spacing-md);
+    --card-padding: var(--spacing-lg);
+    --font-size-h1: 1.5rem;
+    --font-size-h2: 1.3rem;
+    --font-size-h3: 1.15rem;
+    --font-size-h4: 1rem;
+    --font-size-h5: 1rem;
+    --font-size-h6: 1rem;
+    --line-height: 1.55;
+    line-height: var(--line-height);
+  }
+
+  /* While a reply streams in, the last element adds no space below it, so
+     the message doesn't grow and shrink as new blocks arrive */
+  :where([data-density="compact"]) > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* A model's reasoning, collapsed: <details data-reasoning><summary>Thought
+     for 4 seconds</summary>…</details>. Open WebUI's type="reasoning" too. */
+  details:where([data-reasoning], [type="reasoning"]) {
+    padding: 0 0 0 var(--spacing-md);
+    border-width: 0 0 0 2px;
+    border-radius: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  details:where([data-reasoning], [type="reasoning"]) > summary {
+    font-weight: 400;
+  }
+
+  /* Citations: a reference to a source, <sup><a href="#source-1">1</a></sup>,
+     is a small chip. (Markdown footnote references look the same.) */
+  :where(sup > a) {
+    padding: 0.1em 0.45em; /* inline padding, so the line doesn't get taller */
+    border-radius: 1em;
+    background-color: var(--color-surface);
+    text-decoration: none;
+  }
+
+  /* Math: KaTeX and MathJax block math scroll sideways in a narrow column
+     instead of widening it. Block MathML does too in Chromium; Firefox and
+     Safari don't scroll a <math> element yet. */
+  :where(.katex-display, mjx-container[display="true"], math[display="block"]) {
+    max-width: 100%;
+    margin-block: 0 var(--spacing-md);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  :where(.katex-display, mjx-container[display="true"]) {
+    display: block;
+  }
+
+  /* Admonitions (Python-Markdown, MkDocs: !!! note) and GitHub alerts
+     (> [!NOTE]) read as callouts, colored by their kind */
+  :where(.admonition, .markdown-alert) {
+    --tone: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-left: 4px solid var(--tone);
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    background-color: color-mix(in oklab, var(--tone) 12%, var(--color-background));
+  }
+
+  :where(.admonition:is(.tip, .hint, .success, .check, .done), .markdown-alert-tip) { --tone: var(--color-success); }
+  :where(.admonition:is(.warning, .caution, .attention), .markdown-alert-warning) { --tone: var(--color-warning); }
+  :where(.admonition:is(.danger, .error, .failure, .bug), .markdown-alert-caution) { --tone: var(--color-error); }
+
+  /* Element-level specificity so the title's margin beats the p rule */
+  p:where(.admonition-title, .markdown-alert-title), :where(.admonition-title, .markdown-alert-title) {
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+  }
+
+  :where(.admonition, .markdown-alert) > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* ==========================================================================
      Debug Mode
      --------------------------------------------------------------------------
      <html data-tagbrush="debug"> (or the attribute on any element) outlines
@@ -1631,7 +1937,7 @@
   }
 
   :where([data-tagbrush~="debug"]) :where(
-    [class]:not([class=""], .button, .secondary, .outline, .container, .grid, .card, .striped, .visually-hidden, pre *, pre, .highlight, .highlight *, [data-footnotes] *, .footnotes *),
+    [class]:not([class=""], .button, .secondary, .outline, .container, .grid, .card, .striped, .visually-hidden, pre *, pre, .highlight, .highlight *, [data-footnotes] *, .footnotes *, .admonition, .admonition *, .markdown-alert, .markdown-alert *, .katex-display, .katex-display *),
     [style]:not([style^="--"], [style*="; --"], [style*=";--"])
   ) {
     outline: 2px dotted var(--color-warning) !important;

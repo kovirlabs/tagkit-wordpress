@@ -2,7 +2,7 @@
 
 ## 0.1.0 (unreleased)
 
-First version. Bundles TagBrush.css 1.1.0 and TagAction 0.1.0. Tested with WordPress 7.1.
+First version. Bundles TagBrush.css 1.2.0 and TagAction 0.1.0. Tested with WordPress 7.1.
 
 - Block theme with templates for the posts list, single posts, pages, archives, search, and 404, and header and footer parts.
 - `theme.json` maps the Site Editor's Primary color and fonts into TagBrush.css, uses TagBrush.css's reading width, and styles buttons like TagBrush.css's.
