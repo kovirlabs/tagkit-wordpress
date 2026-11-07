@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TagKit for WordPress: a plain, fast, accessible block theme</title>
+<meta name="description" content="TagKit is a WordPress block theme. Your content is semantic HTML styled by TagBrush.css, with light and dark mode and one Primary color that themes the whole site.">
+<link rel="icon" href="https://kovirlabs.github.io/tagstack/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tagbrush@1/tagbrush.min.css">
+<link rel="stylesheet" href="https://kovirlabs.github.io/tagstack/brand.css">
+<script src="https://cdn.jsdelivr.net/npm/tagaction@0/tagaction.min.js" defer></script>
+</head>
+<body>
+<header>
+  <nav aria-label="Tag family" data-brand="bar">
+    <a href="https://kovirlabs.github.io/tagstack/"><img src="https://kovirlabs.github.io/tagstack/mark.svg" alt="" width="24" height="24">Tag family</a>
+    <ul>
+      <li><a href="https://kovirlabs.github.io/tagbrush/">TagBrush.css</a></li>
+      <li><a href="https://kovirlabs.github.io/tagaction/">TagAction</a></li>
+      <li><a href="https://kovirlabs.github.io/tagcheck/">TagCheck</a></li>
+      <li><a href="https://kovirlabs.github.io/tagkit/" aria-current="page">TagKit</a></li>
+      <li><a href="https://github.com/kovirlabs/tagkit-wordpress">GitHub</a></li>
+    </ul>
+  </nav>
+  <hgroup>
+    <p>TagKit for WordPress</p>
+    <h1>A plain, fast, accessible block theme</h1>
+    <p>Your posts and pages are semantic HTML styled by TagBrush.css. Light and dark mode follow each reader's system, and one color themes the whole site.</p>
+  </hgroup>
+  <img src="screenshot.png" alt="TagKit showing the post Markup: HTML Tags and Formatting, with a site title and menu at the top, a large post title, headings one to six, and two blockquotes" width="1200" height="900">
+  <div role="group">
+    <a class="button" href="#install">Install the theme</a>
+    <a class="button secondary" href="https://github.com/kovirlabs/tagkit-wordpress">Source on GitHub</a>
+  </div>
+</header>
+<main>
+  <section id="features">
+    <h2>What you get</h2>
+    <ul>
+      <li>Templates for the posts list (cards in a grid), single posts, pages, archives, search, and 404.</li>
+      <li>A header and a footer you can edit in the Site Editor.</li>
+      <li>One Primary color in the Site Editor themes links, buttons, accents, and tints, readable in light and dark mode. Fonts work the same way.</li>
+      <li>Styles for content from the classic editor (captions, alignments) and from every core block. No page scrolls sideways on a phone.</li>
+      <li>TagAction makes code blocks copyable, tables sortable, and headings linkable. It only loads on pages with code, tables, details, forms, or comments.</li>
+      <li>Everything works with JavaScript turned off.</li>
+    </ul>
+    <p>This theme is one of TagKit's themes. <a href="https://kovirlabs.github.io/tagkit/">TagKit's gallery</a> has page templates and snippets to copy, plus themes for Jekyll, MkDocs, Hugo, and Pandoc.</p>
+  </section>
+
+  <section id="install">
+    <h2>Install</h2>
+    <ol>
+      <li>Download <code>tagkit.zip</code> from the <a href="https://github.com/kovirlabs/tagkit-wordpress/releases">releases page</a>.</li>
+      <li>In WordPress, go to <strong>Appearance &gt; Themes &gt; Add New &gt; Upload Theme</strong>.</li>
+      <li>Choose the zip, install it, and activate TagKit.</li>
+    </ol>
+    <p>Version 0.1.0 is not released yet. Until it is, download <code>tagkit.zip</code> from the latest <a href="https://github.com/kovirlabs/tagkit-wordpress/actions">CI run</a>, or build it from the source:</p>
+    <pre><code>npm install
+npm run zip</code></pre>
+    <p>The zip lands in <code>dist/tagkit.zip</code> and holds only the files WordPress needs.</p>
+  </section>
+
+  <section id="templates">
+    <h2>Templates, parts, and patterns</h2>
+    <p>Edit any of them in <strong>Appearance &gt; Editor</strong>.</p>
+    <table>
+      <caption>Templates</caption>
+      <thead><tr><th>Template</th><th>What it shows</th></tr></thead>
+      <tbody>
+        <tr><td><code>index</code></td><td>The posts list: cards in a grid with a featured image, title, excerpt, and date.</td></tr>
+        <tr><td><code>single</code></td><td>One post with its author, date, categories, tags, previous and next links, and comments.</td></tr>
+        <tr><td><code>page</code></td><td>A page with its title, featured image, and content.</td></tr>
+        <tr><td><code>archive</code></td><td>A category, tag, author, or date archive, as cards.</td></tr>
+        <tr><td><code>search</code></td><td>Search results, as cards, with a search box.</td></tr>
+        <tr><td><code>404</code></td><td>A "Page not found" message.</td></tr>
+      </tbody>
+    </table>
+    <dl>
+      <dt>Header part</dt>
+      <dd>The site title and the navigation menu.</dd>
+      <dt>Footer part</dt>
+      <dd>The site tagline and a credit line.</dd>
+      <dt>Patterns</dt>
+      <dd>Footer credit, No results, and Page not found. The templates use them to hold translatable text. They don't appear in the block inserter.</dd>
+    </dl>
+  </section>
+
+  <section id="color">
+    <h2>One color themes the site</h2>
+    <p>Go to <strong>Appearance &gt; Editor &gt; Styles &gt; Colors</strong> and change <strong>Primary</strong>. TagBrush.css works out readable text, hover, and dark mode colors from it.</p>
+    <p><code>theme.json</code> maps Primary into TagBrush.css's <code>--color-primary</code>, sets the content width to TagBrush.css's reading width, and styles WordPress's buttons with TagBrush.css's button colors. The default Primary is <code>#2563eb</code>.</p>
+    <p>To turn off TagAction, add this to a plugin or a child theme:</p>
+    <pre><code>add_filter( 'tagkit_load_tagaction', '__return_false' );</code></pre>
+  </section>
+
+  <section id="requirements">
+    <h2>Requirements</h2>
+    <dl>
+      <dt>WordPress</dt>
+      <dd>6.6 or later. Tested up to 7.1.</dd>
+      <dt>PHP</dt>
+      <dd>7.4 or later.</dd>
+    </dl>
+    <p>TagBrush.css and TagAction ship inside the theme, so it loads nothing from a CDN.</p>
+  </section>
+
+  <section id="status">
+    <h2>Status</h2>
+    <p>Version 0.1.0 is the first version and is not released yet. It bundles TagBrush.css 1.2.0 and TagAction 0.1.0 and is tested with WordPress 7.1.</p>
+    <p>Tests run against a WordPress in Docker with the Theme Unit Test content. They check that no page scrolls sideways at a 360px phone width, that text the theme colors meets WCAG AA contrast in light and dark mode, that the theme's own pages have no TagCheck errors, that TagAction loads only where it's used, and that the Primary color drives TagBrush.css. CI runs them, and WordPress's Theme Check, against the release zip.</p>
+    <p>Read the <a href="https://github.com/kovirlabs/tagkit-wordpress/blob/main/CHANGELOG.md">changelog</a>.</p>
+  </section>
+</main>
+<footer data-brand="footer">
+  <p>TagKit for WordPress is open source under GPL-3.0-or-later. It bundles TagBrush.css and TagAction under Apache-2.0. <a href="https://github.com/kovirlabs/tagkit-wordpress">Source on GitHub</a>.</p>
+  <p>Part of the <a href="https://kovirlabs.github.io/tagstack/">Tag family</a> from Kovir Labs.</p>
+</footer>
+</body>
+</html>
