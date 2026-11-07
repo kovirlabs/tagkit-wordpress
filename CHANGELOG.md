@@ -9,5 +9,6 @@ First version. Bundles TagBrush.css 1.2.0 and TagAction 0.1.0. Tested with WordP
 - `assets/css/wordpress.css`: TagBrush.css's page layout for `.wp-site-blocks`, post cards, and fixes where core block styles differ (tables, search, calendar in dark mode, classic captions and alignments, responsive content width).
 - TagAction loads only on pages that use it (`tagkit_load_tagaction` filter).
 - A demo site in Docker (`demo/`) with realistic posts.
+- Theme tags list only features the theme has (no `block-styles` or `style-variations`), as the theme directory's review requires.
 - Table blocks show hairlines between rows (core's per-cell borders are replaced), post cards fill the row when there are few posts, and the comment form's 65,525-character counter is hidden.
 - Tests against a Docker WordPress with the Theme Unit Test content; Theme Check in CI.
