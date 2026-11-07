@@ -11,7 +11,7 @@
     "test": "playwright test"
   },
   "devDependencies": {
-    "@kovirlabs/tagcheck": "git+https://github.com/kovirlabs/tagcheck.git",
+    "@kovirlabs/tagcheck": "^0.1.1",
     "@playwright/test": "1.64.1",
     "tagaction": "^0.1.0",
     "tagbrush": "^1.2.0"
