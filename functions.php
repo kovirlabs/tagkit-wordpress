@@ -94,3 +94,30 @@ if ( ! function_exists( 'tagkit_front_page_template' ) ) {
 	}
 }
 add_filter( 'frontpage_template_hierarchy', 'tagkit_front_page_template' );
+
+if ( ! function_exists( 'tagkit_register_block_styles' ) ) {
+	/**
+	 * Card styles for columns and groups, picked in the editor's Styles panel:
+	 * a boxed panel (pricing plans, features), and a featured one that stands out.
+	 * Their look is in assets/css/wordpress.css.
+	 */
+	function tagkit_register_block_styles() {
+		foreach ( array( 'core/column', 'core/group' ) as $block ) {
+			register_block_style(
+				$block,
+				array(
+					'name'  => 'card',
+					'label' => __( 'Card', 'tagkit' ),
+				)
+			);
+			register_block_style(
+				$block,
+				array(
+					'name'  => 'card-featured',
+					'label' => __( 'Featured card', 'tagkit' ),
+				)
+			);
+		}
+	}
+}
+add_action( 'init', 'tagkit_register_block_styles' );

@@ -12,6 +12,7 @@
     "compete": "node scripts/compete.mjs"
   },
   "devDependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
     "@kovirlabs/tagcheck": "^0.1.1",
     "@playwright/test": "1.64.1",
     "tagaction": "^0.1.0",

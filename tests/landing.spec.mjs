@@ -29,6 +29,55 @@ test.describe('landing page as the front page', () => {
     expect(failed, JSON.stringify({ light: result.desktop.contrast, dark: result.dark.contrast, tagcheck: result.tagcheck.errors }, null, 1)).toEqual([]);
   });
 
+  test('sections have room: the hero meets the header, and content doesn\'t touch the colored band', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/');
+    const m = await page.evaluate(() => {
+      const box = (s) => document.querySelector(s).getBoundingClientRect();
+      const h2 = [...document.querySelectorAll('.wp-block-post-content > h2')].find((h) => h.textContent === 'Why teams switch');
+      return {
+        header: box('.wp-site-blocks > header').bottom,
+        hero: box('.wp-block-cover.alignfull').top,
+        mediaBottom: box('.wp-block-media-text').bottom,
+        band: box('.wp-block-group.alignfull.has-background').top,
+        headingToRow: h2.nextElementSibling.getBoundingClientRect().top - h2.getBoundingClientRect().bottom,
+      };
+    });
+    expect(Math.round(m.hero - m.header)).toBe(0);
+    expect(m.band - m.mediaBottom).toBeGreaterThanOrEqual(48);
+    expect(m.headingToRow).toBeLessThanOrEqual(32);
+  });
+
+  test('pricing cards are the same height, with their headings and buttons lined up', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/');
+    const cards = page.locator('.wp-block-column:is(.is-style-card, .is-style-card-featured)');
+    await expect(cards).toHaveCount(3);
+    const m = await cards.evaluateAll((els) => els.map((el) => {
+      const r = (s) => el.querySelector(s).getBoundingClientRect();
+      return { height: el.getBoundingClientRect().height, heading: r('h3').top, button: r('.wp-block-button__link').bottom, buttonHeight: r('.wp-block-button__link').height, padding: getComputedStyle(el).paddingTop };
+    }));
+    for (const key of ['height', 'heading', 'button', 'buttonHeight']) {
+      const values = m.map((c) => Math.round(c[key]));
+      expect(Math.max(...values) - Math.min(...values), `${key}: ${values}`).toBeLessThanOrEqual(1);
+    }
+    expect(parseFloat(m[0].padding)).toBeGreaterThan(0);
+    await expect(page.locator('.is-style-card-featured > p').first()).toHaveText('Most popular');
+  });
+
+  test('headings use the bundled heading font', async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate(() => document.fonts.ready);
+    const font = await page.evaluate(() => ({
+      family: getComputedStyle(document.querySelector('h2')).fontFamily,
+      loaded: [...document.fonts].some((f) => f.family.replace(/"/g, '') === 'Bricolage Grotesque' && f.status === 'loaded'),
+      body: getComputedStyle(document.querySelector('.wp-block-post-content p')).fontFamily,
+    }));
+    expect(font.family).toMatch(/^"?Bricolage Grotesque/);
+    expect(font.loaded).toBe(true);
+    expect(font.body).not.toMatch(/Bricolage/);
+  });
+
   test('the front page shows the page without its title', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('h1')).toHaveCount(1);

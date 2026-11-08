@@ -12,7 +12,7 @@ A plain, fast, accessible block theme: semantic HTML styled by TagBrush.css, wit
 
 TagKit keeps your site simple. Your posts and pages are written as plain, semantic HTML and styled by TagBrush.css: comfortable reading width, clear headings, tables, quotes, and code, in light and dark mode that follow each reader's system setting.
 
-Choose a Primary color in Appearance > Editor > Styles and the whole site follows: links, buttons, accents, and the soft tints behind them, always readable in both light and dark mode. Choose a font the same way.
+Choose a Primary color in Appearance > Editor > Styles and the whole site follows: links, buttons, accents, and the soft tints behind them, always readable in both light and dark mode. Headings use Bricolage Grotesque, bundled with the theme; choose other fonts the same way.
 
 Small touches from TagAction make code blocks copyable, tables sortable, and headings linkable. TagAction only loads on pages that use it, and everything works with JavaScript turned off.
 
@@ -31,7 +31,7 @@ Yes. Add this to a plugin or a child theme: add_filter( 'tagkit_load_tagaction',
 == Changelog ==
 
 = 0.1.0 =
-* First version: templates for the blog, single posts, pages, archives, search, and 404; header and footer parts; TagBrush.css and TagAction bundled; WordPress block compatibility styles; wide and full-width blocks; a front page and a "Page without title" template for landing pages.
+* First version: templates for the blog, single posts, pages, archives, search, and 404; header and footer parts; TagBrush.css and TagAction bundled; WordPress block compatibility styles; wide and full-width blocks; a front page and a "Page without title" template for landing pages; Card and Featured card block styles and a Pricing pattern; Bricolage Grotesque for headings.
 
 == Copyright ==
 
@@ -57,5 +57,9 @@ Source: https://github.com/kovirlabs/tagbrush
 TagAction, Copyright 2026 Kovir Labs
 License: Apache License 2.0
 Source: https://github.com/kovirlabs/tagaction
+
+Bricolage Grotesque, Copyright 2022 The Bricolage Grotesque Project Authors
+License: SIL Open Font License 1.1 (assets/fonts/bricolage-grotesque/OFL.txt)
+Source: https://github.com/ateliertriay/bricolage
 
 Screenshot: the theme showing the WordPress Theme Unit Test post "Markup: HTML Tags and Formatting" (GPLv2 or later, https://github.com/WordPress/theme-test-data).

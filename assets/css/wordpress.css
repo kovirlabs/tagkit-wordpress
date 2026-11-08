@@ -72,10 +72,55 @@
 	padding-left: max(var(--container-padding), (100cqi - var(--container-max-width)) / 2 + var(--container-padding));
 }
 
+/* ==========================================================================
+   Sections: the space between the parts of a page. Landing pages (the front
+   page and "Page without title") give each section room the way a designed
+   site does; full-width bands get the same room on any page.
+   ========================================================================== */
+:root {
+	--tagkit-section-space: clamp(3rem, 1.5rem + 5vw, 6rem);
+}
+
 /* A band of color has room above and below its content */
 :where(.wp-site-blocks > main) :where(.alignfull.wp-block-group.has-background) {
-	padding-top: var(--spacing-xl);
-	padding-bottom: var(--spacing-xl);
+	padding-top: var(--tagkit-section-space);
+	padding-bottom: var(--tagkit-section-space);
+}
+
+/* Content before or after a full-width block doesn't touch it. (Classes,
+   not :where(), so these beat the block layout's zeroed margins.) */
+.wp-block-post-content > :not(.alignfull) + .alignfull,
+.wp-block-post-content > .alignfull + :not(.alignfull) {
+	margin-top: var(--tagkit-section-space);
+}
+
+/* On a landing page, each <h2> starts a section, and so does a wide block
+   with no heading of its own; a heading sits close to the content it introduces */
+:is(.home, .page-template-page-no-title) .wp-block-post-content > :is(h2, .alignwide) {
+	margin-top: var(--tagkit-section-space);
+}
+
+:is(.home, .page-template-page-no-title) .wp-block-post-content > h2 {
+	margin-bottom: var(--spacing-lg);
+}
+
+/* (:is() matches the specificity of the section rule above, so this wins) */
+:is(.home, .page-template-page-no-title) .wp-block-post-content > h2 + :is(.alignwide, *) {
+	margin-top: 0;
+}
+
+.wp-block-post-content > :first-child {
+	margin-top: 0;
+}
+
+/* A full-width block at the top of a landing page meets the header, and one
+   at the bottom meets the footer, with no white strip between */
+:where(.wp-site-blocks) > main:has(> .wp-block-post-content.alignfull:first-child > .alignfull:first-child) {
+	padding-top: 0;
+}
+
+:where(.wp-site-blocks) > main:has(> .wp-block-post-content.alignfull:last-child > .alignfull:last-child) {
+	padding-bottom: 0;
 }
 
 /* The site title is the brand in the top bar */
@@ -291,6 +336,81 @@
 :where(.wp-block-post-template) > :where(.wp-block-post.sticky) {
 	border-color: var(--color-primary);
 	box-shadow: inset 4px 0 0 var(--color-primary);
+}
+
+/* ==========================================================================
+   Card and Featured card: block styles for columns and groups (registered in
+   functions.php), like TagBrush.css's .card. In a row of columns the cards
+   are the same height and their buttons line up along the bottom.
+   ========================================================================== */
+:where(.is-style-card, .is-style-card-featured) {
+	padding: var(--card-padding);
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--card-radius);
+	background-color: var(--color-surface);
+}
+
+:where(.is-style-card-featured) {
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 1px var(--color-primary), var(--shadow-lg);
+}
+
+:where(.is-style-card, .is-style-card-featured) > :first-child {
+	margin-top: 0;
+}
+
+:where(.is-style-card, .is-style-card-featured) > :last-child {
+	margin-bottom: 0;
+}
+
+.wp-block-column:is(.is-style-card, .is-style-card-featured) {
+	display: flex;
+	flex-direction: column;
+}
+
+:where(.wp-block-column:is(.is-style-card, .is-style-card-featured)) > :where(.wp-block-buttons:last-child) {
+	margin-top: auto;
+	padding-top: var(--spacing-md);
+}
+
+/* A short line before a featured card's heading ("Most popular") is a badge
+   on the card's top edge, so the card's contents line up with its neighbors' */
+:where(.is-style-card-featured) {
+	position: relative;
+}
+
+:where(.is-style-card-featured) > :where(p:first-child:has(+ :is(h2, h3, h4))) {
+	position: absolute;
+	top: 0;
+	left: var(--card-padding);
+	margin: 0;
+	padding: 0.125rem var(--spacing-sm);
+	border-radius: 999px;
+	background-color: var(--color-primary);
+	color: var(--color-on-primary, oklch(from var(--color-primary) clamp(0, (0.5636 - l) * 1000, 1) 0 0));
+	font-size: var(--font-size-sm);
+	font-weight: 600;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	transform: translateY(-50%);
+}
+
+:where(.is-style-card-featured) > :where(p:first-child) + :where(h2, h3, h4) {
+	margin-top: 0;
+}
+
+/* Buttons: filled and outline buttons are the same size, as in TagBrush.css
+   (core's outline style has a 2px border and its own padding). The outline
+   keeps core's color, the text color around it, so it stays white on a photo.
+   The specificity matches core's outline rule so this wins. */
+.wp-block-button > .wp-block-button__link {
+	border: var(--border-width) solid transparent;
+}
+
+.wp-block-button.is-style-outline > .wp-block-button__link {
+	padding: var(--button-padding);
+	border-width: var(--border-width);
+	border-color: currentcolor;
 }
 
 /* ==========================================================================

@@ -15,8 +15,12 @@ if [ "$(wp post list --post_type=post --format=count)" -lt 10 ]; then
   wp import /tmp/unit.xml --authors=create --quiet
 fi
 # A landing page built from core blocks (tests/landing.spec.mjs, scripts/compete.mjs)
-if [ -z "$(wp post list --post_type=page --name=landing --field=ID)" ]; then
+# (updated on every run, so the page matches landing.html)
+landing=$(wp post list --post_type=page --name=landing --field=ID)
+if [ -z "$landing" ]; then
   wp post create - --post_type=page --post_title="Landing" --post_name=landing --post_status=publish < landing.html >/dev/null
+else
+  wp post update "$landing" - < landing.html >/dev/null
 fi
 wp plugin install theme-check --activate --quiet || true
 echo "WordPress is ready at http://localhost:8888 (admin / admin)"

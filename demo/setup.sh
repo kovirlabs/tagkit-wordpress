@@ -27,4 +27,12 @@ if [ "$(wp post list --post_type=post --format=count)" -le 1 ]; then
   wp post create /content/about.html --post_type=page --post_title="About" --post_status=publish --post_name=about >/dev/null
   wp comment create --comment_post_ID="$(wp post list --post_type=post --name=what-i-learned-running-a-tiny-saas-for-a-year --field=ID)" --comment_content="The point about charging from day one hit home. Thanks for writing this up." --comment_author="Sam Ito" --comment_approved=1 >/dev/null
 fi
+# A landing page as the front page (content/home.html), and the posts on /blog/
+if [ -z "$(wp post list --post_type=page --name=home --field=ID)" ]; then
+  home=$(wp post create /content/home.html --post_type=page --post_title="Home" --post_name=home --post_status=publish --porcelain)
+  blog=$(wp post create --post_type=page --post_title="Blog" --post_name=blog --post_status=publish --porcelain)
+  wp option update show_on_front page >/dev/null
+  wp option update page_on_front "$home" >/dev/null
+  wp option update page_for_posts "$blog" >/dev/null
+fi
 echo "Demo site: http://localhost:8890  (admin: http://localhost:8890/wp-admin, admin / admin)"

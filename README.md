@@ -12,6 +12,8 @@ Download `tagkit.zip` from the latest [CI run](https://github.com/kovirlabs/tagk
 
 - Templates for the posts list (cards in a grid), single posts (author, date, categories, tags, previous/next, comments), pages, archives, search, and 404, plus a header and footer you can edit in the Site Editor.
 - Landing pages from core blocks: wide and full-width blocks (covers, colored bands, columns, galleries) break out of the text column, a static front page shows without its title, and the **Page without title** template does the same for any page.
+- Landing pages have room between sections, and **Card** and **Featured card** block styles (in the Styles panel of a Column or Group) box a plan or feature; the **Pricing** pattern puts three plans in cards.
+- Headings use Bricolage Grotesque, bundled with the theme (no font CDN).
 - Appearance > Editor > Styles > Colors > **Primary** themes the whole site: links, buttons, accents, and tints, readable in light and dark mode. Fonts work the same way.
 - Content from the classic editor (captions, alignments) and from every core block is styled, and no page scrolls sideways on a phone.
 - TagAction only loads on pages with code, tables, details, forms, or comments. Turn it off with `add_filter( 'tagkit_load_tagaction', '__return_false' );`.
@@ -25,7 +27,7 @@ TagBrush.css styles plain HTML from its own cascade layer. WordPress wraps the p
 
 ## See it
 
-A demo site with realistic posts runs in Docker (it appears in Docker Desktop as `tagkit-demo`):
+A demo site with a landing page and realistic posts runs in Docker (it appears in Docker Desktop as `tagkit-demo`):
 
 ```sh
 docker compose -f demo/docker-compose.yml up -d && sh demo/setup.sh
@@ -37,7 +39,7 @@ Open http://localhost:8890 (admin at http://localhost:8890/wp-admin, admin / adm
 
 ```sh
 npm install
-npm run assets                                        # copy TagBrush.css and TagAction from node_modules into assets/
+npm run assets                                        # copy TagBrush.css, TagAction, and the heading font from node_modules into assets/
 docker compose -f tests/wp/docker-compose.yml up -d    # WordPress at http://localhost:8888 (admin / admin)
 sh tests/wp/setup.sh                                  # install, activate, import the Theme Unit Test content
 npm test                                              # Playwright + TagCheck against that WordPress
@@ -53,4 +55,4 @@ The tests crawl every page of the Theme Unit Test content and check that none sc
 
 ## License
 
-GPL-3.0-or-later. TagBrush.css and TagAction are bundled under the Apache License 2.0, which is compatible with GPLv3.
+GPL-3.0-or-later. TagBrush.css and TagAction are bundled under the Apache License 2.0, which is compatible with GPLv3. Bricolage Grotesque is bundled under the SIL Open Font License 1.1.
