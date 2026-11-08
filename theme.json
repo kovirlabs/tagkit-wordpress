@@ -15,7 +15,7 @@
 			]
 		},
 		"layout": {
-			"contentSize": "min(70ch, 100%)",
+			"contentSize": "min(44rem, 100%)",
 			"wideSize": "min(1200px, 100%)"
 		},
 		"spacing": {
@@ -61,6 +61,9 @@
 			}
 		}
 	},
+	"customTemplates": [
+		{ "name": "page-no-title", "title": "Page without title", "postTypes": [ "page" ] }
+	],
 	"templateParts": [
 		{ "name": "header", "title": "Header", "area": "header" },
 		{ "name": "footer", "title": "Footer", "area": "footer" }

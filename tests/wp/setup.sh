@@ -14,5 +14,9 @@ if [ "$(wp post list --post_type=post --format=count)" -lt 10 ]; then
   docker compose exec -T cli sh -c 'curl -sfL https://raw.githubusercontent.com/WordPress/theme-test-data/master/themeunittestdata.wordpress.xml -o /tmp/unit.xml'
   wp import /tmp/unit.xml --authors=create --quiet
 fi
+# A landing page built from core blocks (tests/landing.spec.mjs, scripts/compete.mjs)
+if [ -z "$(wp post list --post_type=page --name=landing --field=ID)" ]; then
+  wp post create - --post_type=page --post_title="Landing" --post_name=landing --post_status=publish < landing.html >/dev/null
+fi
 wp plugin install theme-check --activate --quiet || true
 echo "WordPress is ready at http://localhost:8888 (admin / admin)"

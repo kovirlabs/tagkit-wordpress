@@ -47,6 +47,37 @@
 	margin-block-start: 0;
 }
 
+/* TagBrush.css holds a lone <article> in <main> to its reading width; here the
+   block layout sets the widths (text column, wide, full), so that cap is lifted */
+:where(.wp-site-blocks > main > article) {
+	max-width: none;
+}
+
+/* Full-width blocks reach both edges of the window, past main's side padding
+   (the post content itself is "full" only so wide blocks have room).
+   .wp-site-blocks is the size container, so this needs no 100vw (which would
+   include the scrollbar and scroll sideways). */
+:where(.wp-site-blocks) {
+	container-type: inline-size;
+}
+
+:where(.wp-site-blocks > main) .alignfull:not(.wp-block-post-content) {
+	margin-right: calc(50% - 50cqi);
+	margin-left: calc(50% - 50cqi);
+}
+
+/* Blocks inside a full-width block line up with the page again */
+:where(.wp-site-blocks > main) .alignfull:where(.wp-block-group, .wp-block-cover) {
+	padding-right: max(var(--container-padding), (100cqi - var(--container-max-width)) / 2 + var(--container-padding));
+	padding-left: max(var(--container-padding), (100cqi - var(--container-max-width)) / 2 + var(--container-padding));
+}
+
+/* A band of color has room above and below its content */
+:where(.wp-site-blocks > main) :where(.alignfull.wp-block-group.has-background) {
+	padding-top: var(--spacing-xl);
+	padding-bottom: var(--spacing-xl);
+}
+
 /* The site title is the brand in the top bar */
 :where(.wp-block-site-title) {
 	margin: 0;
@@ -173,6 +204,28 @@
 :where(.wp-block-pullquote) {
 	padding: var(--spacing-lg) 0;
 	border-block: 2px solid var(--color-border);
+}
+
+/* A pullquote's design is the rules above and below; the quote inside is
+   plain text, not TagBrush.css's boxed blockquote */
+:where(.wp-block-pullquote) blockquote {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+}
+
+/* Quotes inside a block with its own colors take those colors, so white text
+   on a colored band stays white on that band */
+:where(.has-background, .has-text-color) :where(blockquote) {
+	border-left-color: currentcolor;
+	background-color: transparent;
+	color: inherit;
+}
+
+:where(.has-background, .has-text-color) :where(.wp-block-pullquote) {
+	border-color: currentcolor;
 }
 
 /* Search: the field and button look like TagBrush.css's */

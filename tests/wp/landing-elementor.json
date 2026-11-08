@@ -1,0 +1,684 @@
+[
+ {
+  "id": "1a0005",
+  "elType": "container",
+  "isInner": false,
+  "settings": {
+   "content_width": "full",
+   "min_height": {
+    "unit": "px",
+    "size": 480
+   },
+   "flex_justify_content": "center",
+   "flex_align_items": "center",
+   "background_background": "classic",
+   "background_image": {
+    "url": "/wp-content/uploads/2013/03/featured-image-horizontal.jpg",
+    "id": ""
+   },
+   "background_size": "cover",
+   "background_position": "center center",
+   "background_overlay_background": "classic",
+   "background_overlay_color": "#000000",
+   "background_overlay_opacity": {
+    "unit": "px",
+    "size": 0.6
+   }
+  },
+  "elements": [
+   {
+    "id": "1a0001",
+    "elType": "widget",
+    "widgetType": "heading",
+    "settings": {
+     "title": "Readable reports from any CSV",
+     "header_size": "h1",
+     "align": "center",
+     "title_color": "#ffffff"
+    },
+    "elements": []
+   },
+   {
+    "id": "1a0002",
+    "elType": "widget",
+    "widgetType": "text-editor",
+    "settings": {
+     "editor": "<p>Drop in an export, get a report your boss will actually read. No setup, no dashboards to learn.</p>",
+     "align": "center",
+     "text_color": "#ffffff"
+    },
+    "elements": []
+   },
+   {
+    "id": "1a0004",
+    "elType": "container",
+    "isInner": true,
+    "settings": {
+     "flex_direction": "row",
+     "flex_justify_content": "center"
+    },
+    "elements": [
+     {
+      "id": "1a0003",
+      "elType": "widget",
+      "widgetType": "button",
+      "settings": {
+       "text": "Start a free trial",
+       "link": {
+        "url": "#pricing"
+       }
+      },
+      "elements": []
+     },
+     {
+      "id": "1a0000",
+      "elType": "widget",
+      "widgetType": "button",
+      "settings": {
+       "text": "How it works",
+       "link": {
+        "url": "#pricing"
+       },
+       "background_color": "#ffffff00",
+       "border_border": "solid",
+       "border_width": {
+        "unit": "px",
+        "top": "2",
+        "right": "2",
+        "bottom": "2",
+        "left": "2",
+        "isLinked": true
+       },
+       "border_color": "#ffffff",
+       "button_text_color": "#ffffff"
+      },
+      "elements": []
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "1a0011",
+  "elType": "container",
+  "isInner": false,
+  "settings": {},
+  "elements": [
+   {
+    "id": "1a0006",
+    "elType": "widget",
+    "widgetType": "heading",
+    "settings": {
+     "title": "Why teams switch",
+     "header_size": "h2",
+     "align": "center"
+    },
+    "elements": []
+   },
+   {
+    "id": "1a0010",
+    "elType": "container",
+    "isInner": true,
+    "settings": {
+     "flex_direction": "row"
+    },
+    "elements": [
+     {
+      "id": "1a0009",
+      "elType": "container",
+      "isInner": true,
+      "settings": {},
+      "elements": [
+       {
+        "id": "1a0007",
+        "elType": "widget",
+        "widgetType": "heading",
+        "settings": {
+         "title": "Two minutes, start to finish",
+         "header_size": "h3"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a0008",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "settings": {
+         "editor": "<p>Upload a file, pick the columns that matter, and share a link. That's the whole product.</p>"
+        },
+        "elements": []
+       }
+      ]
+     },
+     {
+      "id": "1a000c",
+      "elType": "container",
+      "isInner": true,
+      "settings": {},
+      "elements": [
+       {
+        "id": "1a000a",
+        "elType": "widget",
+        "widgetType": "heading",
+        "settings": {
+         "title": "Works with what you have",
+         "header_size": "h3"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a000b",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "settings": {
+         "editor": "<p>Stripe, Shopify, QuickBooks, a spreadsheet your predecessor left behind. If it exports CSV, it works.</p>"
+        },
+        "elements": []
+       }
+      ]
+     },
+     {
+      "id": "1a000f",
+      "elType": "container",
+      "isInner": true,
+      "settings": {},
+      "elements": [
+       {
+        "id": "1a000d",
+        "elType": "widget",
+        "widgetType": "heading",
+        "settings": {
+         "title": "Your data stays yours",
+         "header_size": "h3"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a000e",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "settings": {
+         "editor": "<p>Files are deleted after 30 days. No tracking, no resale, no AI training on your numbers.</p>"
+        },
+        "elements": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "1a0018",
+  "elType": "container",
+  "isInner": false,
+  "settings": {
+   "flex_direction": "row"
+  },
+  "elements": [
+   {
+    "id": "1a0013",
+    "elType": "container",
+    "isInner": true,
+    "settings": {},
+    "elements": [
+     {
+      "id": "1a0012",
+      "elType": "widget",
+      "widgetType": "image",
+      "settings": {
+       "image": {
+        "url": "/wp-content/uploads/2013/03/soworthloving-wallpaper.jpg",
+        "id": "",
+        "alt": "A laptop on a desk showing a report"
+       }
+      },
+      "elements": []
+     }
+    ]
+   },
+   {
+    "id": "1a0017",
+    "elType": "container",
+    "isInner": true,
+    "settings": {
+     "flex_justify_content": "center"
+    },
+    "elements": [
+     {
+      "id": "1a0014",
+      "elType": "widget",
+      "widgetType": "heading",
+      "settings": {
+       "title": "Reports people finish reading",
+       "header_size": "h3"
+      },
+      "elements": []
+     },
+     {
+      "id": "1a0015",
+      "elType": "widget",
+      "widgetType": "text-editor",
+      "settings": {
+       "editor": "<p>Every report leads with the three numbers that changed most, then the detail for anyone who wants it.</p>"
+      },
+      "elements": []
+     },
+     {
+      "id": "1a0016",
+      "elType": "widget",
+      "widgetType": "text-editor",
+      "settings": {
+       "editor": "<ul><li>Plain-language summaries</li><li>Charts that print well</li><li>One link, no login for readers</li></ul>"
+      },
+      "elements": []
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "1a001a",
+  "elType": "container",
+  "isInner": false,
+  "settings": {
+   "content_width": "full",
+   "background_background": "classic",
+   "background_color": "#1d4ed8",
+   "padding": {
+    "unit": "px",
+    "top": "64",
+    "right": "16",
+    "bottom": "64",
+    "left": "16",
+    "isLinked": false
+   }
+  },
+  "elements": [
+   {
+    "id": "1a0019",
+    "elType": "widget",
+    "widgetType": "testimonial",
+    "settings": {
+     "testimonial_content": "We replaced a 40-tab spreadsheet with one link. Our Monday meeting is now fifteen minutes.",
+     "testimonial_name": "Priya Nair",
+     "testimonial_job": "operations lead at a bakery chain",
+     "testimonial_alignment": "center",
+     "content_content_color": "#ffffff",
+     "name_text_color": "#ffffff",
+     "job_text_color": "#ffffff"
+    },
+    "elements": []
+   }
+  ]
+ },
+ {
+  "id": "1a002c",
+  "elType": "container",
+  "isInner": false,
+  "settings": {},
+  "elements": [
+   {
+    "id": "1a001b",
+    "elType": "widget",
+    "widgetType": "heading",
+    "settings": {
+     "title": "Pricing",
+     "header_size": "h2",
+     "align": "center",
+     "_element_id": "pricing"
+    },
+    "elements": []
+   },
+   {
+    "id": "1a002b",
+    "elType": "container",
+    "isInner": true,
+    "settings": {
+     "flex_direction": "row"
+    },
+    "elements": [
+     {
+      "id": "1a0020",
+      "elType": "container",
+      "isInner": true,
+      "settings": {},
+      "elements": [
+       {
+        "id": "1a001c",
+        "elType": "widget",
+        "widgetType": "heading",
+        "settings": {
+         "title": "Solo",
+         "header_size": "h3"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a001d",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "settings": {
+         "editor": "<p style='font-size:1.75rem'><strong>$9</strong>/month</p>"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a001e",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "settings": {
+         "editor": "<ul><li>10 reports a month</li><li>Share links</li><li>Email support</li></ul>"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a001f",
+        "elType": "widget",
+        "widgetType": "button",
+        "settings": {
+         "text": "Choose Solo",
+         "link": {
+          "url": "#"
+         },
+         "background_color": "#ffffff00",
+         "border_border": "solid",
+         "border_width": {
+          "unit": "px",
+          "top": "2",
+          "right": "2",
+          "bottom": "2",
+          "left": "2",
+          "isLinked": true
+         },
+         "border_color": "#1d4ed8",
+         "button_text_color": "#1d4ed8"
+        },
+        "elements": []
+       }
+      ]
+     },
+     {
+      "id": "1a0025",
+      "elType": "container",
+      "isInner": true,
+      "settings": {},
+      "elements": [
+       {
+        "id": "1a0021",
+        "elType": "widget",
+        "widgetType": "heading",
+        "settings": {
+         "title": "Team",
+         "header_size": "h3"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a0022",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "settings": {
+         "editor": "<p style='font-size:1.75rem'><strong>$29</strong>/month</p>"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a0023",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "settings": {
+         "editor": "<ul><li>Unlimited reports</li><li>Five seats</li><li>Scheduled reports</li></ul>"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a0024",
+        "elType": "widget",
+        "widgetType": "button",
+        "settings": {
+         "text": "Choose Team",
+         "link": {
+          "url": "#"
+         }
+        },
+        "elements": []
+       }
+      ]
+     },
+     {
+      "id": "1a002a",
+      "elType": "container",
+      "isInner": true,
+      "settings": {},
+      "elements": [
+       {
+        "id": "1a0026",
+        "elType": "widget",
+        "widgetType": "heading",
+        "settings": {
+         "title": "Company",
+         "header_size": "h3"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a0027",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "settings": {
+         "editor": "<p style='font-size:1.75rem'><strong>$99</strong>/month</p>"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a0028",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "settings": {
+         "editor": "<ul><li>Everything in Team</li><li>SSO and audit log</li><li>A named contact</li></ul>"
+        },
+        "elements": []
+       },
+       {
+        "id": "1a0029",
+        "elType": "widget",
+        "widgetType": "button",
+        "settings": {
+         "text": "Talk to us",
+         "link": {
+          "url": "#"
+         },
+         "background_color": "#ffffff00",
+         "border_border": "solid",
+         "border_width": {
+          "unit": "px",
+          "top": "2",
+          "right": "2",
+          "bottom": "2",
+          "left": "2",
+          "isLinked": true
+         },
+         "border_color": "#1d4ed8",
+         "button_text_color": "#1d4ed8"
+        },
+        "elements": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "1a0035",
+  "elType": "container",
+  "isInner": false,
+  "settings": {
+   "content_width": "boxed",
+   "boxed_width": {
+    "unit": "px",
+    "size": 720
+   }
+  },
+  "elements": [
+   {
+    "id": "1a002d",
+    "elType": "widget",
+    "widgetType": "heading",
+    "settings": {
+     "title": "Questions",
+     "header_size": "h2"
+    },
+    "elements": []
+   },
+   {
+    "id": "1a002e",
+    "elType": "widget",
+    "widgetType": "nested-accordion",
+    "settings": {
+     "items": [
+      {
+       "item_title": "Is there a free plan?",
+       "_id": "1a002f"
+      },
+      {
+       "item_title": "Can I cancel any time?",
+       "_id": "1a0030"
+      }
+     ]
+    },
+    "elements": [
+     {
+      "id": "1a0032",
+      "elType": "container",
+      "isInner": true,
+      "settings": {},
+      "elements": [
+       {
+        "id": "1a0031",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "settings": {
+         "editor": "<p>No, but every plan has a 14-day trial with no card required.</p>"
+        },
+        "elements": []
+       }
+      ]
+     },
+     {
+      "id": "1a0034",
+      "elType": "container",
+      "isInner": true,
+      "settings": {},
+      "elements": [
+       {
+        "id": "1a0033",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "settings": {
+         "editor": "<p>Yes. Cancel from your account page and you won't be billed again.</p>"
+        },
+        "elements": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "1a0038",
+  "elType": "container",
+  "isInner": false,
+  "settings": {},
+  "elements": [
+   {
+    "id": "1a0036",
+    "elType": "widget",
+    "widgetType": "heading",
+    "settings": {
+     "title": "From the blog",
+     "header_size": "h2"
+    },
+    "elements": []
+   },
+   {
+    "id": "1a0037",
+    "elType": "widget",
+    "widgetType": "wp-widget-recent-posts",
+    "settings": {
+     "wp": {
+      "title": "",
+      "number": "3",
+      "show_date": "on"
+     }
+    },
+    "elements": []
+   }
+  ]
+ },
+ {
+  "id": "1a003d",
+  "elType": "container",
+  "isInner": false,
+  "settings": {
+   "flex_direction": "row",
+   "flex_wrap": "nowrap"
+  },
+  "elements": [
+   {
+    "id": "1a0039",
+    "elType": "widget",
+    "widgetType": "image",
+    "settings": {
+     "image": {
+      "url": "/wp-content/uploads/2013/09/dsc20050604_133440_34211.jpg",
+      "id": "",
+      "alt": "Coffee being brewed"
+     }
+    },
+    "elements": []
+   },
+   {
+    "id": "1a003a",
+    "elType": "widget",
+    "widgetType": "image",
+    "settings": {
+     "image": {
+      "url": "/wp-content/uploads/2013/09/dsc20040724_152504_532.jpg",
+      "id": "",
+      "alt": "A forest valley"
+     }
+    },
+    "elements": []
+   },
+   {
+    "id": "1a003b",
+    "elType": "widget",
+    "widgetType": "image",
+    "settings": {
+     "image": {
+      "url": "/wp-content/uploads/2014/01/dsc20050315_145007_132.jpg",
+      "id": "",
+      "alt": "A laptop on a desk"
+     }
+    },
+    "elements": []
+   },
+   {
+    "id": "1a003c",
+    "elType": "widget",
+    "widgetType": "image",
+    "settings": {
+     "image": {
+      "url": "/wp-content/uploads/2012/12/unicorn-wallpaper.jpg",
+      "id": "",
+      "alt": "Notebooks and a phone"
+     }
+    },
+    "elements": []
+   }
+  ]
+ }
+]

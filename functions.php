@@ -80,3 +80,17 @@ if ( ! function_exists( 'tagkit_enqueue_assets' ) ) {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'tagkit_enqueue_assets' );
+
+if ( ! function_exists( 'tagkit_front_page_template' ) ) {
+	/**
+	 * The front-page template shows a page's content without its title. When
+	 * the front page lists the latest posts instead, the posts list is used.
+	 *
+	 * @param string[] $templates Template names WordPress looks for, in order.
+	 * @return string[]
+	 */
+	function tagkit_front_page_template( $templates ) {
+		return 'page' === get_option( 'show_on_front' ) ? $templates : array();
+	}
+}
+add_filter( 'frontpage_template_hierarchy', 'tagkit_front_page_template' );

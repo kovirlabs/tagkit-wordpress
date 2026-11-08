@@ -5,6 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: 'tests',
   timeout: 300000,
+  workers: 1, // tests/landing.spec.mjs changes the front page, which the other tests read
   reporter: 'list',
   use: { baseURL: process.env.WP_URL ?? 'http://localhost:8888' },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],

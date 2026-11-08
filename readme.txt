@@ -31,7 +31,7 @@ Yes. Add this to a plugin or a child theme: add_filter( 'tagkit_load_tagaction',
 == Changelog ==
 
 = 0.1.0 =
-* First version: templates for the blog, single posts, pages, archives, search, and 404; header and footer parts; TagBrush.css and TagAction bundled; WordPress block compatibility styles.
+* First version: templates for the blog, single posts, pages, archives, search, and 404; header and footer parts; TagBrush.css and TagAction bundled; WordPress block compatibility styles; wide and full-width blocks; a front page and a "Page without title" template for landing pages.
 
 == Copyright ==
 

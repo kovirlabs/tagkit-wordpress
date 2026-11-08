@@ -11,6 +11,7 @@ Download `tagkit.zip` from the latest [CI run](https://github.com/kovirlabs/tagk
 ## What you get
 
 - Templates for the posts list (cards in a grid), single posts (author, date, categories, tags, previous/next, comments), pages, archives, search, and 404, plus a header and footer you can edit in the Site Editor.
+- Landing pages from core blocks: wide and full-width blocks (covers, colored bands, columns, galleries) break out of the text column, a static front page shows without its title, and the **Page without title** template does the same for any page.
 - Appearance > Editor > Styles > Colors > **Primary** themes the whole site: links, buttons, accents, and tints, readable in light and dark mode. Fonts work the same way.
 - Content from the classic editor (captions, alignments) and from every core block is styled, and no page scrolls sideways on a phone.
 - TagAction only loads on pages with code, tables, details, forms, or comments. Turn it off with `add_filter( 'tagkit_load_tagaction', '__return_false' );`.
@@ -44,9 +45,11 @@ sh tests/wp/theme-check.sh                            # WordPress's Theme Check
 npm run zip                                           # dist/tagkit.zip, only the files WordPress needs
 ```
 
+`npm run compete` puts the same landing page in TagKit, Twenty Twenty-Five (WordPress's default theme), and Hello Elementor with Elementor (built with Elementor's own widgets), runs the landing-page checks in [`tests/landing-checks.mjs`](tests/landing-checks.mjs) on each (layout, phone width, contrast in light and dark mode, keyboard and no-JavaScript FAQ, TagCheck, page weight, and speed on a throttled phone), and writes a scorecard with screenshots to `compete-results/`. It switches the active theme while it runs, so don't run it alongside `npm test`.
+
 To test the release build instead of the working copy: `npm run zip`, then start WordPress with `THEME_DIR=../../dist/tagkit docker compose -f tests/wp/docker-compose.yml up -d`.
 
-The tests crawl every page of the Theme Unit Test content and check that none scrolls sideways at a 360px phone width, that text the theme colors meets WCAG AA contrast in light and dark mode, that the theme's own pages have no TagCheck errors, that TagAction loads only where it's used, and that the Primary color drives TagBrush.css. CI runs them, and Theme Check, against the release zip.
+The tests crawl every page of the Theme Unit Test content and check that none scrolls sideways at a 360px phone width, that text the theme colors meets WCAG AA contrast in light and dark mode, that the theme's own pages have no TagCheck errors, that a core-blocks landing page passes every landing-page check, that TagAction loads only where it's used, and that the Primary color drives TagBrush.css. CI runs them, and Theme Check, against the release zip.
 
 ## License
 
